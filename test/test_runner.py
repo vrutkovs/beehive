@@ -406,6 +406,14 @@ Then a step passes
             self.context.execute_steps(doc)
 
 
+def create_mock_config():
+    config = Mock()
+    config.steps_dir = 'steps'
+    config.env_py = 'environment.py'
+
+    return config
+
+
 class TestRunner(object):
     def test_load_hooks_execfiles_hook_file(self):
         with patch('beehive.runner.exec_file') as ef:
@@ -414,7 +422,7 @@ class TestRunner(object):
                 base_dir = 'fake/path'
                 hooks_path = os.path.join(base_dir, 'environment.py')
 
-                r = runner.Runner(None)
+                r = runner.Runner(create_mock_config())
                 r.base_dir = base_dir
                 r.load_hooks()
 
@@ -720,7 +728,7 @@ class FsMock(object):
 
 class TestFeatureDirectory(object):
     def test_default_path_no_steps(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = []
         config.verbose = True
         r = runner.Runner(config)
@@ -734,7 +742,7 @@ class TestFeatureDirectory(object):
         ok_(('isdir', os.path.join(fs.base, 'features', 'steps')) in fs.calls)
 
     def test_default_path_no_features(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = []
         config.verbose = True
         r = runner.Runner(config)
@@ -745,7 +753,7 @@ class TestFeatureDirectory(object):
                 assert_raises(ConfigError, r.setup_paths)
 
     def test_default_path(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = []
         config.verbose = True
         r = runner.Runner(config)
@@ -760,7 +768,7 @@ class TestFeatureDirectory(object):
         eq_(r.base_dir, os.path.abspath('features'))
 
     def test_supplied_feature_file(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['foo.feature']
         config.verbose = True
         r = runner.Runner(config)
@@ -778,7 +786,7 @@ class TestFeatureDirectory(object):
         eq_(r.base_dir, fs.base)
 
     def test_supplied_feature_file_no_steps(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['foo.feature']
         config.verbose = True
         r = runner.Runner(config)
@@ -791,7 +799,7 @@ class TestFeatureDirectory(object):
                     assert_raises(ConfigError, r.setup_paths)
 
     def test_supplied_feature_directory(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['spam']
         config.verbose = True
         r = runner.Runner(config)
@@ -808,7 +816,7 @@ class TestFeatureDirectory(object):
         eq_(r.base_dir, os.path.join(fs.base, 'spam'))
 
     def test_supplied_feature_directory_no_steps(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['spam']
         config.verbose = True
         r = runner.Runner(config)
@@ -822,7 +830,7 @@ class TestFeatureDirectory(object):
         ok_(('isdir', os.path.join(fs.base, 'spam', 'steps')) in fs.calls)
 
     def test_supplied_feature_directory_missing(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['spam']
         config.verbose = True
         r = runner.Runner(config)
@@ -836,7 +844,7 @@ class TestFeatureDirectory(object):
 
 class TestFeatureDirectoryLayout2(object):
     def test_default_path(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = []
         config.verbose = True
         r = runner.Runner(config)
@@ -856,7 +864,7 @@ class TestFeatureDirectoryLayout2(object):
         eq_(r.base_dir, os.path.abspath('features'))
 
     def test_supplied_root_directory(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['features']
         config.verbose = True
         r = runner.Runner(config)
@@ -877,7 +885,7 @@ class TestFeatureDirectoryLayout2(object):
         eq_(r.base_dir, os.path.join(fs.base, 'features'))
 
     def test_supplied_root_directory_no_steps(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['features']
         config.verbose = True
         r = runner.Runner(config)
@@ -897,7 +905,7 @@ class TestFeatureDirectoryLayout2(object):
         eq_(r.base_dir, None)
 
     def test_supplied_feature_file(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['features/group1/foo.feature']
         config.verbose = True
         r = runner.Runner(config)
@@ -920,8 +928,8 @@ class TestFeatureDirectoryLayout2(object):
         eq_(r.base_dir, fs.join(fs.base, "features"))
 
     def test_supplied_feature_file_no_steps(self):
-        config = Mock()
-        config.paths = ['features/group1/foo.feature']
+        config = create_mock_config()
+        config.paths = [ 'features/group1/foo.feature' ]
         config.verbose = True
         r = runner.Runner(config)
 
@@ -937,7 +945,7 @@ class TestFeatureDirectoryLayout2(object):
                     assert_raises(ConfigError, r.setup_paths)
 
     def test_supplied_feature_directory(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['features/group1']
         config.verbose = True
         r = runner.Runner(config)
@@ -958,7 +966,7 @@ class TestFeatureDirectoryLayout2(object):
         eq_(r.base_dir, os.path.join(fs.base, 'features'))
 
     def test_supplied_feature_directory_no_steps(self):
-        config = Mock()
+        config = create_mock_config()
         config.paths = ['features/group1']
         config.verbose = True
         r = runner.Runner(config)

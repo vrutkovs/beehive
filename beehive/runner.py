@@ -598,9 +598,9 @@ class Runner(ModelRunner):
             if self.config.verbose:
                 print('Trying base directory:', new_base_dir)
 
-            if os.path.isdir(os.path.join(new_base_dir, 'steps')):
+            if os.path.isdir(os.path.join(new_base_dir, self.config.steps_dir)):
                 break
-            if os.path.isfile(os.path.join(new_base_dir, 'environment.py')):
+            if os.path.isfile(os.path.join(new_base_dir, self.config.env_py)):
                 break
             if new_base_dir == root_dir:
                 break
@@ -610,12 +610,12 @@ class Runner(ModelRunner):
         if new_base_dir == root_dir:
             if self.config.verbose:
                 if not self.config.paths:
-                    print('ERROR: Could not find "steps" directory. Please ' +
+                    print('ERROR: Could not find "%s" directory. Please ' % self.config.steps_dir +
                           'specify where to find your features.')
                 else:
-                    print('ERROR: Could not find "steps" directory in your ' +
+                    print('ERROR: Could not find "%s" directory in your ' % self.config.steps_dir +
                           'specified path "%s"' % base_dir)
-            raise ConfigError('No steps directory in "%s"' % base_dir)
+            raise ConfigError('No %s directory in "%s"' % (self.config.steps_dir, base_dir))
 
         base_dir = new_base_dir
         self.config.base_dir = base_dir
@@ -648,7 +648,8 @@ class Runner(ModelRunner):
         """
         context.config.setup_logging()
 
-    def load_hooks(self, filename='environment.py'):
+    def load_hooks(self, filename=''):
+        filename = filename or self.config.env_py
         hooks_path = os.path.join(self.base_dir, filename)
         if os.path.exists(hooks_path):
             exec_file(hooks_path, self.hooks)
@@ -665,7 +666,7 @@ class Runner(ModelRunner):
 
         # -- Allow steps to import other stuff from the steps dir
         # NOTE: Default matcher can be overridden in "environment.py" hook.
-        steps_dir = os.path.join(self.base_dir, 'steps')
+        steps_dir = os.path.join(self.base_dir, self.config.steps_dir)
         paths = [steps_dir] + list(extra_step_paths)
         with PathManager(paths):
             default_matcher = matchers.current_matcher
