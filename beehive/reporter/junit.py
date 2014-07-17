@@ -186,6 +186,8 @@ class JUnitReporter(Reporter):
         :return: Textual description of the scenario.
         """
         header_line = u'\n@scenario.begin\n'
+        tags = scenario.tags
+        header_line += '\n  %s\n' % ' '.join(['@%s' % tag for tag in tags])
         header_line += '  %s: %s\n' % (scenario.keyword, scenario.name)
         footer_line = u'\n@scenario.end\n' + u'-' * 80 + '\n'
         text = u''
