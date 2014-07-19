@@ -68,6 +68,12 @@ options = [
      dict(action='store_true',
           help="Invokes formatters without executing the steps.")),
 
+    (('-D', '--define'),
+     dict(action='append', dest='userdata',
+          help="""Define custom settings available to steps in
+                  context.config.userdata. Example: --define foo=bar
+                  puts the string "bar" into context.config.userdata.foo.""")),
+
     (('-e', '--exclude'),
      dict(metavar="PATTERN", dest='exclude_re',
           help="""Don't run feature files matching regular expression
@@ -446,6 +452,8 @@ class Configuration(object):
         logging_level=logging.INFO,
         summary=True,
         junit=False,
+        stage=None,
+        userdata=[],
         # -- SPECIAL:
         default_format="pretty",   # -- Used when no formatters are configured.
         css=None,
@@ -549,6 +557,11 @@ class Configuration(object):
         if unknown_formats:
             parser.error("format=%s is unknown" % ", ".join(unknown_formats))
 
+        if self.stage is None:
+            # -- USE ENVIRONMENT-VARIABLE, if stage is undefined.
+            self.stage = os.environ.get("BEHAVE_STAGE", None)
+        self.setup_stage(self.stage)
+        self.setup_userdata()
         self.setup_model()
 
     def collect_unknown_formats(self):
@@ -621,3 +634,38 @@ class Configuration(object):
         if self.scenario_outline_annotation_schema:
             name_schema = unicode(self.scenario_outline_annotation_schema)
             ScenarioOutline.annotation_schema = name_schema.strip()
+
+    def setup_stage(self, stage=None):
+        """Setup the test stage that selects a different set of
+        steps and environment implementations.
+
+        :param stage:   Name of current test stage (as string or None).
+
+        EXAMPLE::
+
+            # -- SETUP DEFAULT TEST STAGE (unnamed):
+            config = Configuration()
+            config.setup_stage()
+            assert config.steps_dir == "steps"
+            assert config.environment_file == "environment.py"
+
+            # -- SETUP PRODUCT TEST STAGE:
+            config.setup_stage("product")
+            assert config.steps_dir == "product_steps"
+            assert config.environment_file == "product_environment.py"
+        """
+        steps_dir = "steps"
+        environment_file = "environment.py"
+        if stage:
+            # -- USE A TEST STAGE: Select different set of implementations.
+            prefix = stage + "_"
+            steps_dir = prefix + steps_dir
+            environment_file = prefix + environment_file
+        self.steps_dir = steps_dir
+        self.environment_file = environment_file
+
+    def setup_userdata(self):
+        class UserData(object):
+            keep_artifacts = "yes"
+
+        self.userdata = UserData()
