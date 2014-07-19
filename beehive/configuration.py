@@ -561,7 +561,8 @@ class Configuration(object):
             # -- USE ENVIRONMENT-VARIABLE, if stage is undefined.
             self.stage = os.environ.get("BEHAVE_STAGE", None)
         self.setup_stage(self.stage)
-        self.setup_userdata()
+
+        self.userdata = UserData(self.userdata)
         self.setup_model()
 
     def collect_unknown_formats(self):
@@ -664,8 +665,10 @@ class Configuration(object):
         self.steps_dir = steps_dir
         self.environment_file = environment_file
 
-    def setup_userdata(self):
-        class UserData(object):
-            keep_artifacts = "yes"
 
-        self.userdata = UserData()
+class UserData(object):
+    def __init__(self, userdata):
+        for entry in userdata:
+            parts = entry.split("=", 1)
+            name, value = parts[0], parts[1] if len(parts) > 1 else ""
+            self.__setattr__(name, value)
