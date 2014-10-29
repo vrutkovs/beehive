@@ -7,3 +7,7 @@ Use beehive4cmd0 step library (predecessor of beehive4cmd).
 import beehive4cmd0.__all_steps__
 import beehive4cmd0.passing_steps
 import beehive4cmd0.failing_steps
+
+assert beehive4cmd0.__all_steps__
+assert beehive4cmd0.passing_steps
+assert beehive4cmd0.failing_steps

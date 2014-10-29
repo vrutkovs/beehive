@@ -13,7 +13,7 @@ script:
   - COVERAGE_FILE=.coverage.features coverage run bin/beehive -f progress3 --junit --tags=~@xfail features/
   - COVERAGE_FILE=.coverage.tools coverage run bin/beehive -f progress3 --junit --tags=~@xfail tools/test-features/
   - COVERAGE_FILE=.coverage.issues coverage run bin/beehive -f progress3 --junit --tags=~@xfail issue.features/
-  - pyflakes beehive beehive4cmd0
+  - pyflakes beehive beehive4cmd0 issue.features more.features features
 after_success:
   - coverage combine
   - coveralls

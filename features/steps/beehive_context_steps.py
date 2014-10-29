@@ -14,7 +14,7 @@ EXAMPLE
       Then the beehive context should not have a parameter named "person"
 """
 
-from beehive import given, when, then, step
+from beehive import given, then, step
 from hamcrest import assert_that, equal_to
 
 # -----------------------------------------------------------------------------

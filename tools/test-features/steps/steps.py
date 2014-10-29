@@ -1,5 +1,5 @@
 import logging
-from beehive import *
+from beehive import given, when, then
 
 spam_log = logging.getLogger('spam')
 ham_log = logging.getLogger('ham')

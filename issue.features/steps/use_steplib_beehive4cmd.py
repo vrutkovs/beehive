@@ -9,3 +9,8 @@ import beehive4cmd0.command_steps
 import beehive4cmd0.passing_steps
 import beehive4cmd0.failing_steps
 import beehive4cmd0.note_steps
+
+assert beehive4cmd0.note_steps
+assert beehive4cmd0.failing_steps
+assert beehive4cmd0.passing_steps
+assert beehive4cmd0.command_steps

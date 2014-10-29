@@ -93,7 +93,7 @@ def step_then_tag_expression_selects_elements_with_tags(context):
 
 
 @given('the model elements with name and tags')
-def step_given_named_model_elements_with_tags(context):
+def step_the_model_elements_with_name_and_tags(context):
     """
     .. code-block:: gherkin
 
@@ -123,7 +123,7 @@ def step_given_named_model_elements_with_tags(context):
 
 
 @then('the tag expression selects model elements with')
-def step_given_named_model_elements_with_tags(context):
+def step_tag_expression_selects_model_elements_with_tags(context):
     """
     .. code-block:: gherkin
 

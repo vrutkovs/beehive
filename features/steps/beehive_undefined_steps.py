@@ -6,7 +6,7 @@ REQUIRES:
   * beehive4cmd.steplib.output steps (command output from beehive).
 """
 
-from beehive import given, when, then, step
+from beehive import then
 from beehive.runner_util import make_undefined_step_snippet
 
 
