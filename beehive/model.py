@@ -1349,9 +1349,13 @@ class Step(BasicStatement, Replayable):
             else:
                 # no assertion text; format the exception
                 error = traceback.format_exc()
+                if isinstance(error, str):
+                    error = error.decode('utf-8')
         except Exception, e:
             self.status = 'failed'
             error = traceback.format_exc()
+            if isinstance(error, str):
+                error = error.decode('utf-8')
             self.store_exception_context(e)
 
         self.duration = time.time() - start
