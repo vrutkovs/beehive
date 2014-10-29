@@ -5,6 +5,9 @@ Compatibility of :module:`collections` between different Python versions.
 
 from __future__ import absolute_import
 import warnings
+from operator import itemgetter
+from heapq import nlargest
+from itertools import repeat, ifilter
 
 try:
     # -- SINCE: Python2.7
