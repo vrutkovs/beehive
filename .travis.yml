@@ -5,7 +5,7 @@ python:
   - pypy
 
 install:
-  - pip install --use-mirrors -q mock nose PyHamcrest python-coveralls
+  - pip install --use-mirrors -q mock nose PyHamcrest python-coveralls pyflakes
   - python setup.py -q install
 script:
   - python --version
@@ -13,6 +13,7 @@ script:
   - COVERAGE_FILE=.coverage.features coverage run bin/beehive -f progress3 --junit --tags=~@xfail features/
   - COVERAGE_FILE=.coverage.tools coverage run bin/beehive -f progress3 --junit --tags=~@xfail tools/test-features/
   - COVERAGE_FILE=.coverage.issues coverage run bin/beehive -f progress3 --junit --tags=~@xfail issue.features/
+  - pyflakes beehive beehive4cmd0
 after_success:
   - coverage combine
   - coveralls
