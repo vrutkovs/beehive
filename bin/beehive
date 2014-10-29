@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+
+# -- ENSURE: Use local path during development.
+import sys
+import os.path
+
+# ----------------------------------------------------------------------------
+# SETUP PATHS:
+# ----------------------------------------------------------------------------
+NAME = "beehive"
+HERE = os.path.dirname(__file__)
+TOP  = os.path.join(HERE, "..")
+if os.path.isdir(os.path.join(TOP, NAME)):
+    sys.path.insert(0, os.path.abspath(TOP))
+
+# ----------------------------------------------------------------------------
+# BEEHIVE-TWEAKS:
+# ----------------------------------------------------------------------------
+def setup_beehive():
+    """
+    Apply tweaks, extensions and patches to "beehive".
+    """
+    from beehive.configuration import Configuration
+    # -- DISABLE: Timings to simplify issue.features/ tests.
+    # Configuration.defaults["format0"] = "pretty"
+    # Configuration.defaults["format0"] = "progress"
+    Configuration.defaults["show_timings"] = False
+
+def beehive_main0():
+    # from beehive.configuration import Configuration
+    from beehive.__main__ import main as beehive_main
+    setup_beehive()
+    return beehive_main()
+
+# ----------------------------------------------------------------------------
+# MAIN:
+# ----------------------------------------------------------------------------
+if __name__ == "__main__":
+    if os.environ.has_key("COVERAGE_PROCESS_START"):
+        import coverage
+        coverage.process_startup()
+    sys.exit(beehive_main0())

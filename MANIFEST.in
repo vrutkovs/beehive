@@ -1,0 +1,25 @@
+include README.rst
+include CHANGES.rst
+include MANIFEST.in
+include LICENSE
+include .coveragerc
+include .editorconfig
+include .pycheckrc
+include pylintrc
+include *.cfg
+include *.ini
+include *.rst
+include *.txt
+include bin/beehive*
+recursive-include bin           *.py *.cmd *.sh *.zip
+recursive-include beehive4cmd0   *.py
+recursive-include etc           *.xsd *.txt *.json-schema
+recursive-include docs          *.rst *.txt *.css *.py *.html *.rst-* *.png Makefile
+recursive-include docs/_themes  *.html *.conf *.css *.css_t LICENSE*
+recursive-include test          *.py
+recursive-include tools         *.feature *.py *.yml *.sh
+recursive-include features      *.feature *.py *.txt
+recursive-include issue.features  *.feature *.py *.txt
+recursive-include more.features *.feature *.py *.txt
+recursive-include requirements  *.txt
+prune .tox
