@@ -10,9 +10,9 @@ install:
 script:
   - python --version
   - nosetests --with-coverage
-  - COVERAGE_FILE=.coverage.features coverage run bin/beehive -f progress --junit --tags=~@xfail features/
-  - COVERAGE_FILE=.coverage.tools coverage run bin/beehive -f progress --junit --tags=~@xfail tools/test-features/
-  - COVERAGE_FILE=.coverage.issues coverage run bin/beehive -f progress --junit --tags=~@xfail issue.features/
+  - COVERAGE_FILE=.coverage.features coverage run bin/beehive -f progress3 --junit --tags=~@xfail features/
+  - COVERAGE_FILE=.coverage.tools coverage run bin/beehive -f progress3 --junit --tags=~@xfail tools/test-features/
+  - COVERAGE_FILE=.coverage.issues coverage run bin/beehive -f progress3 --junit --tags=~@xfail issue.features/
 after_success:
   - coverage combine
   - coveralls
