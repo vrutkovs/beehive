@@ -128,7 +128,7 @@ class JUnitReporter(Reporter):
         Helper function to find the first step that has the given step.status.
 
         EXAMPLE: Search for a failing step in a scenario (all steps).
-            >>> scenario = ...
+            >>> scenario = "..."
             >>> failed_step = select_step_with_status("failed", scenario)
             >>> failed_step = select_step_with_status("failed", scenario.all_steps)
             >>> assert failed_step.status == "failed"
