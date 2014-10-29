@@ -3,13 +3,21 @@
 import sys
 from beehive.formatter.base import StreamOpener
 from beehive.textutil import compute_words_maxsize
-from beehive.importer import LazyDict, LazyObject
-
+from beehive.formatter.plain import PlainFormatter
+from beehive.formatter.pretty import PrettyFormatter
+from beehive.formatter.json import JSONFormatter, PrettyJSONFormatter
+from beehive.formatter.null import NullFormatter
+from beehive.formatter.html import HTMLFormatter
+from beehive.formatter.progress import ScenarioProgressFormatter, StepProgressFormatter, ScenarioStepProgressFormatter
+from beehive.formatter.rerun import RerunFormatter
+from beehive.formatter.tags import TagsFormatter, TagsLocationFormatter
+from beehive.formatter.steps import StepsFormatter, StepsDocFormatter, StepsUsageFormatter
+from beehive.formatter.sphinx_steps import SphinxStepsFormatter
 
 # -----------------------------------------------------------------------------
 # FORMATTER REGISTRY:
 # -----------------------------------------------------------------------------
-formatters = LazyDict()
+formatters = {}
 
 
 def register_as(formatter_class, name):
@@ -54,30 +62,22 @@ def get_formatter(config, stream_openers):
 # SETUP:
 # -----------------------------------------------------------------------------
 def setup_formatters():
-    # -- NOTE: Use lazy imports for formatters (to speed up start-up time).
-    _L = LazyObject
-    register_as(_L("beehive.formatter.plain:PlainFormatter"), "plain")
-    register_as(_L("beehive.formatter.pretty:PrettyFormatter"), "pretty")
-    register_as(_L("beehive.formatter.json:JSONFormatter"), "json")
-    register_as(_L("beehive.formatter.json:PrettyJSONFormatter"), "json.pretty")
-    register_as(_L("beehive.formatter.null:NullFormatter"), "null")
-    register_as(_L("beehive.formatter.progress:ScenarioProgressFormatter"),
-                "progress")
-    register_as(_L("beehive.formatter.progress:StepProgressFormatter"),
-                "progress2")
-    register_as(_L("beehive.formatter.progress:ScenarioStepProgressFormatter"),
-                "progress3")
-    register_as(_L("beehive.formatter.rerun:RerunFormatter"), "rerun")
-    register_as(_L("beehive.formatter.tags:TagsFormatter"), "tags")
-    register_as(_L("beehive.formatter.tags:TagsLocationFormatter"),
-                "tags.location")
-    register_as(_L("beehive.formatter.steps:StepsFormatter"), "steps")
-    register_as(_L("beehive.formatter.steps:StepsDocFormatter"), "steps.doc")
-    register_as(_L("beehive.formatter.steps:StepsUsageFormatter"), "steps.usage")
-    register_as(_L("beehive.formatter.sphinx_steps:SphinxStepsFormatter"),
-                "sphinx.steps")
-    register_as(_L("beehive.formatter.html:HTMLFormatter"), "html")
-
+    formatters["plain"] = PlainFormatter
+    formatters["pretty"] = PrettyFormatter
+    formatters["json"] = JSONFormatter
+    formatters["json.pretty"] = PrettyJSONFormatter
+    formatters["null"] = NullFormatter
+    formatters["progress"] = ScenarioProgressFormatter
+    formatters["progress2"] = StepProgressFormatter
+    formatters["progress3"] = ScenarioStepProgressFormatter
+    formatters["rerun"] = RerunFormatter
+    formatters["tags"] = TagsFormatter
+    formatters["tags.location"] = TagsLocationFormatter
+    formatters["steps"] = StepsFormatter
+    formatters["steps.doc"] = StepsDocFormatter
+    formatters["steps.usage"] = StepsUsageFormatter
+    formatters["sphinx.steps"] = SphinxStepsFormatter
+    formatters["html"] = HTMLFormatter
 
 # -----------------------------------------------------------------------------
 # MODULE-INIT:
