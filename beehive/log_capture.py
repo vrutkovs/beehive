@@ -3,8 +3,6 @@ import functools
 from logging.handlers import BufferingHandler
 import re
 
-from beehive.configuration import ConfigError
-
 
 class RecordFilter(object):
     '''Implement logging record filtering as per the configuration
