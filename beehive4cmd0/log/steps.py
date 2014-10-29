@@ -57,7 +57,7 @@ IDEA:
         | bar      | CURRENT | xxx     |
 """
 
-from beehive import given, when, then, step
+from beehive import then, step
 from beehive4cmd0.command_steps import \
     step_file_should_contain_multiline_text, \
     step_file_should_not_contain_multiline_text
@@ -374,7 +374,7 @@ def step_use_log_record_configuration(context):
 # TODO: STEP DEFINITIONS:
 # -----------------------------------------------------------------------------
 @step('I capture log records with level "{level}" or above')
-def step_I_capture_logrecords(context, level):
+def step_I_capture_logrecords_with_level_or_above(context, level):
     raise NotImplementedError()
 
 
