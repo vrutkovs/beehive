@@ -52,3 +52,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Remaining files after building/testing beehive
+__WORKDIR__
+reports/
+rerun.featureset
+testrun1.json
