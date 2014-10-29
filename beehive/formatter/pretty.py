@@ -222,7 +222,7 @@ class PrettyFormatter(Formatter):
     #     self.stream.flush()
 
     def exception(self, exception):
-        exception_text = HERP
+        exception_text = 'HERP'
         self.stream.write(self.failed(exception_text) + '\n')
         self.stream.flush()
 
