@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Reporter(object):
     """
     Base class for all reporters.

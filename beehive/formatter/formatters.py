@@ -29,6 +29,7 @@ def register_as(formatter_class, name):
     """
     formatters[name] = formatter_class
 
+
 def register(formatter_class):
     register_as(formatter_class, formatter_class.name)
 
@@ -41,7 +42,7 @@ def list_formatters(stream):
     """
     formatter_names = sorted(formatters)
     column_size = compute_words_maxsize(formatter_names)
-    schema = u"  %-"+ str(column_size) +"s  %s\n"
+    schema = u"  %-" + str(column_size) + "s  %s\n"
     for name in formatter_names:
         stream.write(schema % (name, formatters[name].description))
 

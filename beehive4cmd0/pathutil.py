@@ -47,6 +47,7 @@ def realpath_with_context(path, context):
         path = os.path.join(context.workdir, os.path.normpath(path))
     return path
 
+
 def posixpath_normpath(pathname):
     """
     Convert path into POSIX path:
@@ -63,6 +64,7 @@ def posixpath_normpath(pathname):
         pathname2 = pathname2.replace(backslash, '/')
     return pathname2
 
+
 def read_file_contents(filename, context=None, encoding=None):
     filename_ = realpath_with_context(filename, context)
     assert os.path.exists(filename_)
@@ -75,6 +77,7 @@ def read_file_contents(filename, context=None, encoding=None):
 #     if os.path.exists(context.workdir):
 #         shutil.rmtree(context.workdir, ignore_errors=True)
 #     ensure_workdir_exists(context)
+
 
 def create_textfile_with_contents(filename, contents, encoding='utf-8'):
     """
@@ -101,6 +104,7 @@ def ensure_file_exists(filename, context=None):
         create_textfile_with_contents(real_filename, "")
     assert os.path.exists(real_filename), "ENSURE file exists: %s" % filename
 
+
 def ensure_directory_exists(dirname, context=None):
     """
     Ensures that a directory exits.
@@ -112,7 +116,7 @@ def ensure_directory_exists(dirname, context=None):
     if not os.path.exists(real_dirname):
         os.makedirs(real_dirname)
     assert os.path.exists(real_dirname), "ENSURE dir exists: %s" % dirname
-    assert os.path.isdir(real_dirname),  "ENSURE isa dir: %s" % dirname
+    assert os.path.isdir(real_dirname), "ENSURE isa dir: %s" % dirname
 
 # def ensure_workdir_exists(context):
 #     """

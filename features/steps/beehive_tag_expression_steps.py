@@ -35,6 +35,7 @@ class ModelElement(object):
         self.name = name
         self.tags = tags or []
 
+
 # -----------------------------------------------------------------------------
 # TYPE CONVERTERS:
 # -----------------------------------------------------------------------------
@@ -42,6 +43,7 @@ def convert_tag_expression(text):
     parts = text.strip().split()
     return TagExpression(parts)
 register_type(TagExpression=convert_tag_expression)
+
 
 def convert_yesno(text):
     text = text.strip().lower()
@@ -65,6 +67,7 @@ def step_given_the_tag_expression(context, tag_expression):
     """
     context.tag_expression = tag_expression
 
+
 @then('the tag expression selects elements with tags')
 def step_then_tag_expression_selects_elements_with_tags(context):
     """
@@ -80,7 +83,7 @@ def step_then_tag_expression_selects_elements_with_tags(context):
     context.table.require_columns(["tags", "selected?"])
     tag_expression = context.tag_expression
     expected = []
-    actual   = []
+    actual = []
     for row in context.table.rows:
         element_tags = convert_model_element_tags(row["tags"])
         expected_element_selected = convert_yesno(row["selected?"])
@@ -147,4 +150,4 @@ def step_tag_expression_selects_model_elements_with_tags(context):
                 actual_selected.append(model_element.name)
 
         assert_that(actual_selected, equal_to(expected_selected_names),
-            "tag_expression=%s (row=%s)" % (tag_expression_text, row_index))
+                    "tag_expression=%s (row=%s)" % (tag_expression_text, row_index))

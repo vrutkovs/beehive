@@ -16,6 +16,7 @@ EXAMPLES:
 
 from beehive import step, then
 
+
 # -----------------------------------------------------------------------------
 # STEPS FOR: failing
 # -----------------------------------------------------------------------------
@@ -25,6 +26,7 @@ def step_fails(context, word):
     Step that always fails, mostly needed in examples.
     """
     assert False, "EXPECT: Failing step"
+
 
 @then(u'it should fail because "{reason}"')
 def then_it_should_fail_because(context, reason):

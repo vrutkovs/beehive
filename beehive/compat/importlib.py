@@ -21,9 +21,8 @@ except ImportError:
                 dot = package.rindex('.', 0, dot)
             except ValueError:
                 raise ValueError("attempted relative import beyond top-level "
-                                  "package")
+                                 "package")
         return "%s.%s" % (package[:dot], name)
-
 
     def import_module(name, package=None):
         """Import a module.

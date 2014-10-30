@@ -45,7 +45,7 @@ import shutil
 import sys
 
 
-__author__  = "Jens Engel"
+__author__ = "Jens Engel"
 __version__ = "0.2"
 __license__ = "BSD"
 __copyright__ = "(c) 2013 by Jens Engel"
@@ -64,14 +64,14 @@ class Package(object):
     def __init__(self, filename, name=None):
         if not name and filename:
             name = self.get_pkgname(filename)
-        self.name  = name
+        self.name = name
         self.files = []
         if filename:
             self.files.append(filename)
 
     @property
     def versions(self):
-        versions_info = [ self.get_pkgversion(p) for p in self.files ]
+        versions_info = [self.get_pkgversion(p) for p in self.files]
         return versions_info
 
     @classmethod
@@ -80,7 +80,7 @@ class Package(object):
         if basename.startswith("http") and r"%2F" in basename:
             # -- PIP DOWNLOAD-CACHE PACKAGE FILE NAME SCHEMA:
             pos = basename.rfind("%2F")
-            basename = basename[pos+3:]
+            basename = basename[pos + 3:]
 
         version_part_index = 0
         parts = basename.split("-")
@@ -95,11 +95,10 @@ class Package(object):
         remainder = None
         if version_part_index > 0:
             version = parts[version_part_index]
-            if version_part_index+1 < len(parts):
-                remainder = "-".join(parts[version_part_index+1:])
+            if version_part_index + 1 < len(parts):
+                remainder = "-".join(parts[version_part_index + 1:])
         assert name, "OOPS: basename=%s, name='%s'" % (basename, name)
         return (name, version, remainder)
-
 
     @classmethod
     def get_pkgname(cls, filename):
@@ -132,6 +131,7 @@ class Package(object):
                 return True
         return False
 
+
 def collect_packages(package_dir, package_map=None):
     if package_map is None:
         package_map = {}
@@ -151,6 +151,7 @@ def collect_packages(package_dir, package_map=None):
             # -- SAME PACKAGE: Collect other variant/version.
             package.files.append(pkg_filepath)
     return packages
+
 
 def make_index_for(package, index_dir, verbose=True):
     """
@@ -260,8 +261,8 @@ def make_package_index(download_dir):
 
     # -- STEP: Make local PYTHON PACKAGE INDEX.
     root_package = Package(None, "Python Package Index")
-    root_package.files = [ os.path.join(pkg_rootdir, pkg.name, "index.html")
-                           for pkg in packages ]
+    root_package.files = [os.path.join(pkg_rootdir, pkg.name, "index.html")
+                          for pkg in packages]
     make_index_for(root_package, pkg_rootdir)
     for package in packages:
         index_dir = os.path.join(pkg_rootdir, package.name)

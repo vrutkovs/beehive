@@ -42,7 +42,6 @@ class Matcher(object):
             schema = self.schema
         return schema % (step_type, self.string)
 
-
     def check_match(self, step):
         """Match me against the "step" name supplied.
 
@@ -85,6 +84,7 @@ class ParseMatcher(Matcher):
             args.append(model.Argument(start, end, step[start:end], value, name))
         args.sort(key=lambda x: x.start)
         return args
+
 
 class CFParseMatcher(ParseMatcher):
     """
@@ -208,6 +208,7 @@ def use_step_matcher(name):
     global current_matcher
     current_matcher = matcher_mapping[name]
 
+
 def step_matcher(name):
     """
     DEPRECATED, use :func:`use_step_matcher()` instead.
@@ -218,7 +219,6 @@ def step_matcher(name):
                   PendingDeprecationWarning, stacklevel=2)
     use_step_matcher(name)
 
+
 def get_matcher(func, string):
     return current_matcher(func, string)
-
-

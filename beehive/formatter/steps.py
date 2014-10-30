@@ -386,8 +386,8 @@ class StepsUsageFormatter(AbstractStepsFormatter):
                       for step_definition in step_definitions]
 
         max_size = compute_words_maxsize(step_texts)
-        if max_size < self.min_location_column-2:
-            max_size = self.min_location_column-2
+        if max_size < self.min_location_column - 2:
+            max_size = self.min_location_column - 2
 
         # -- STEP: Write report.
         schema = u"  %-" + str(max_size) + "s  # %s\n"
@@ -413,6 +413,7 @@ class StepsUsageFormatter(AbstractStepsFormatter):
         schema = u"%-" + str(max_size) + "s  # %s\n"
         for step, step_text in zip(undefined_steps, steps_text):
             self.stream.write(schema % (step_text, step.location))
+
 
 # -----------------------------------------------------------------------------
 # UTILITY FUNCTIONS:

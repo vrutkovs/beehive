@@ -1,16 +1,18 @@
 from __future__ import with_statement
 
 from mock import Mock, patch
-from nose.tools import *
+from nose.tools import eq_
 import parse
 
 from beehive import matchers, model, runner
+
 
 class DummyMatcher(matchers.Matcher):
     desired_result = None
 
     def check_match(self, step):
         return DummyMatcher.desired_result
+
 
 class TestMatcher(object):
     def setUp(self):
@@ -32,6 +34,7 @@ class TestMatcher(object):
         assert match.func is func
         assert match.arguments == arguments
 
+
 class TestParseMatcher(object):
     def setUp(self):
         self.recorded_args = None
@@ -41,22 +44,24 @@ class TestParseMatcher(object):
 
     def test_returns_none_if_parser_does_not_match(self):
         matcher = matchers.ParseMatcher(None, 'a string')
-        with patch.object(matcher.parser, 'parse') as parse:
-            parse.return_value = None
+        with patch.object(matcher.parser, 'parse') as parser_parse:
+            parser_parse.return_value = None
             assert matcher.match('just a random step') is None
 
     def test_returns_arguments_based_on_matches(self):
         func = lambda x: -x
         matcher = matchers.ParseMatcher(func, 'foo')
 
-        results = parse.Result([1, 2, 3], {'foo': 'bar', 'baz': -45.3},
-                               {
-                                   0: (13, 14),
-                                   1: (16, 17),
-                                   2: (22, 23),
-                                   'foo': (32, 35),
-                                   'baz': (39, 44),
-                               })
+        results = parse.Result(
+            [1, 2, 3],
+            {'foo': 'bar', 'baz': -45.3},
+            {
+                0: (13, 14),
+                1: (16, 17),
+                2: (22, 23),
+                'foo': (32, 35),
+                'baz': (39, 44),
+            })
 
         expected = [
             (13, 14, '1', 1, None),
@@ -95,6 +100,7 @@ class TestParseMatcher(object):
         m = matcher.match("has a foo, an 11 and a 3.14159")
         m.run(context)
         eq_(self.recorded_args, ((context, 'foo', 11, 3.14159), {}))
+
 
 class TestRegexMatcher(object):
     def test_returns_none_if_regex_does_not_match(self):
@@ -139,6 +145,7 @@ class TestRegexMatcher(object):
         args = m.arguments
         have = [(a.start, a.end, a.original, a.value, a.name) for a in args]
         eq_(have, expected)
+
 
 def test_step_matcher_current_matcher():
     current_matcher = matchers.current_matcher

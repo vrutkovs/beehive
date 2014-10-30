@@ -1,9 +1,10 @@
 from __future__ import with_statement
 
-from nose.tools import *
+from nose.tools import eq_
 from mock import patch
 
 from beehive.log_capture import LoggingCapture
+
 
 class TestLogCapture(object):
     def test_get_value_returns_all_log_records(self):

@@ -2,11 +2,11 @@ from __future__ import with_statement
 import os.path
 import tempfile
 
-from nose.tools import *
+from nose.tools import eq_, ok_
 from beehive import configuration
 
 # one entry of each kind handled
-TEST_CONFIG='''[beehive]
+TEST_CONFIG = '''[beehive]
 outfiles= /absolute/path1
           relative/path2
 paths = /absolute/path3
@@ -18,6 +18,7 @@ format=pretty
 stdout_capture=no
 bogus=spam
 '''
+
 
 class TestConfiguration(object):
 
@@ -34,10 +35,9 @@ class TestConfiguration(object):
         ])
         eq_(d['paths'], [
             os.path.normpath('/absolute/path3'),  # -- WINDOWS-REQUIRES: normpath
-            os.path.normpath(os.path.join(tndir, 'relative/path4')),
-            ])
+            os.path.normpath(os.path.join(tndir, 'relative/path4'))
+        ])
         eq_(d['format'], ['pretty', 'tag-counter'])
         eq_(d['tags'], ['@foo,~@bar', '@zap'])
         eq_(d['stdout_capture'], False)
         ok_('bogus' not in d)
-

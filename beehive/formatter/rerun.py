@@ -90,7 +90,7 @@ class RerunFormatter(Formatter):
         self.stream.write(message % len(self.failed_scenarios))
         if self.show_timestamp:
             now = datetime.now().replace(microsecond=0)
-            self.stream.write("# NOW: %s\n"% now.isoformat(" "))
+            self.stream.write("# NOW: %s\n" % now.isoformat(" "))
 
         # -- SECTION: Textual summary in comments.
         if self.show_failed_scenarios_descriptions:
@@ -102,7 +102,7 @@ class RerunFormatter(Formatter):
                     current_feature = scenario.filename
                     short_filename = relpath(scenario.filename, os.getcwd())
                     self.stream.write(u"# %s\n" % short_filename)
-                self.stream.write(u"#  %4d:  %s\n" % \
+                self.stream.write(u"#  %4d:  %s\n" %
                                   (scenario.line, scenario.name))
             self.stream.write("\n")
 

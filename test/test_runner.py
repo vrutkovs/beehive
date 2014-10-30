@@ -9,12 +9,13 @@ import warnings
 import tempfile
 
 from mock import Mock, patch
-from nose.tools import *
+from nose.tools import raises, eq_, assert_raises, ok_
 import unittest
 
 from beehive import model, parser, runner, step_registry
 from beehive.configuration import ConfigError
 from beehive.log_capture import LoggingCapture
+assert LoggingCapture
 from beehive.formatter.base import StreamOpener
 
 
@@ -216,8 +217,9 @@ class TestContext(unittest.TestCase):
         eq_('thing' in self.context, True)
         del self.context.thing
 
+
 class ExampleSteps(object):
-    text  = None
+    text = None
     table = None
 
     @staticmethod
@@ -242,12 +244,13 @@ class ExampleSteps(object):
     def register_steps_with(cls, step_registry):
         STEP_DEFINITIONS = [
             ("step", "a step passes", cls.step_passes),
-            ("step", "a step fails",  cls.step_fails),
-            ("step", "a step with text",    cls.step_with_text),
-            ("step", "a step with a table",  cls.step_with_table),
+            ("step", "a step fails", cls.step_fails),
+            ("step", "a step with text", cls.step_with_text),
+            ("step", "a step with a table", cls.step_with_table),
         ]
         for keyword, string, func in STEP_DEFINITIONS:
             step_registry.add_step_definition(keyword, string, func)
+
 
 class TestContext_ExecuteSteps(unittest.TestCase):
     """
@@ -259,9 +262,9 @@ class TestContext_ExecuteSteps(unittest.TestCase):
         runner_ = Mock()
         self.config = runner_.config = Mock()
         runner_.config.verbose = False
-        runner_.config.stdout_capture  = False
-        runner_.config.stderr_capture  = False
-        runner_.config.log_capture  = False
+        runner_.config.stdout_capture = False
+        runner_.config.stderr_capture = False
+        runner_.config.log_capture = False
         self.context = runner.Context(runner_)
         # self.context.text = None
         # self.context.table = None
@@ -272,7 +275,7 @@ class TestContext_ExecuteSteps(unittest.TestCase):
             # -- SETUP ONCE:
             self.step_registry = step_registry.StepRegistry()
             ExampleSteps.register_steps_with(self.step_registry)
-        ExampleSteps.text  = None
+        ExampleSteps.text = None
         ExampleSteps.table = None
 
     def test_execute_steps_with_simple_steps(self):
@@ -292,7 +295,7 @@ Then a step passes
 '''.lstrip()
         with patch('beehive.step_registry.registry', self.step_registry):
             try:
-                result = self.context.execute_steps(doc)
+                self.context.execute_steps(doc)
             except AssertionError, e:  # -- PY26-CLEANUP-MARK
                 ok_("FAILED SUB-STEP: When a step fails" in str(e))
 
@@ -304,7 +307,7 @@ Then a step passes
 '''.lstrip()
         with patch('beehive.step_registry.registry', self.step_registry):
             try:
-                result = self.context.execute_steps(doc)
+                self.context.execute_steps(doc)
             except AssertionError, e:  # -- PY26-CLEANUP-MARK
                 ok_("UNDEFINED SUB-STEP: When a step is undefined" in str(e))
 
@@ -335,8 +338,8 @@ Then a step passes
         with patch('beehive.step_registry.registry', self.step_registry):
             result = self.context.execute_steps(doc)
             expected_table = model.Table([u"Name", u"Age"], 0, [
-                    [u"Alice", u"12"],
-                    [u"Bob",   u"23"],
+                [u"Alice", u"12"],
+                [u"Bob", u"23"],
             ])
             eq_(result, True)
             eq_(expected_table, ExampleSteps.table)
@@ -391,7 +394,6 @@ When a step with text:
             self.context.text = original_text
             self.context.execute_steps(doc)
             eq_(self.context.text, original_text)
-
 
     @raises(ValueError)
     def test_execute_steps_should_fail_when_called_without_feature(self):
@@ -563,8 +565,8 @@ class TestRunWithPaths(unittest.TestCase):
         self.config.reporters = []
         self.config.logging_level = None
         self.config.logging_filter = None
-        self.config.outputs = [ Mock(), StreamOpener(stream=sys.stdout) ]
-        self.config.format = [ "plain", "progress" ]
+        self.config.outputs = [Mock(), StreamOpener(stream=sys.stdout)]
+        self.config.format = ["plain", "progress"]
         self.runner = runner.Runner(self.config)
         self.load_hooks = self.runner.load_hooks = Mock()
         self.load_step_definitions = self.runner.load_step_definitions = Mock()
@@ -614,7 +616,7 @@ class TestRunWithPaths(unittest.TestCase):
         abspath.side_effect = lambda x: x.upper()
         self.config.lang = 'fritz'
         self.config.format = ['plain']
-        self.config.outputs = [ StreamOpener(stream=sys.stdout) ]
+        self.config.outputs = [StreamOpener(stream=sys.stdout)]
         self.config.output.encoding = None
         self.config.exclude = lambda s: False
         self.config.junit = False
@@ -632,7 +634,7 @@ class TestRunWithPaths(unittest.TestCase):
 class FsMock(object):
     def __init__(self, *paths):
         self.base = os.path.abspath('.')
-        self.sep  = os.path.sep
+        self.sep = os.path.sep
 
         # This bit of gymnastics is to support Windows. We feed in a bunch of
         # paths in places using FsMock that assume that POSIX-style paths
@@ -855,7 +857,7 @@ class TestFeatureDirectoryLayout2(object):
 
     def test_supplied_root_directory(self):
         config = Mock()
-        config.paths = [ 'features' ]
+        config.paths = ['features']
         config.verbose = True
         r = runner.Runner(config)
 
@@ -871,12 +873,12 @@ class TestFeatureDirectoryLayout2(object):
                 with r.path_manager:
                     r.setup_paths()
 
-        ok_(('isdir',  os.path.join(fs.base, 'features', 'steps')) in fs.calls)
+        ok_(('isdir', os.path.join(fs.base, 'features', 'steps')) in fs.calls)
         eq_(r.base_dir, os.path.join(fs.base, 'features'))
 
     def test_supplied_root_directory_no_steps(self):
         config = Mock()
-        config.paths = [ 'features' ]
+        config.paths = ['features']
         config.verbose = True
         r = runner.Runner(config)
 
@@ -891,13 +893,12 @@ class TestFeatureDirectoryLayout2(object):
                 with r.path_manager:
                     assert_raises(ConfigError, r.setup_paths)
 
-        ok_(('isdir',  os.path.join(fs.base, 'features', 'steps')) in fs.calls)
+        ok_(('isdir', os.path.join(fs.base, 'features', 'steps')) in fs.calls)
         eq_(r.base_dir, None)
-
 
     def test_supplied_feature_file(self):
         config = Mock()
-        config.paths = [ 'features/group1/foo.feature' ]
+        config.paths = ['features/group1/foo.feature']
         config.verbose = True
         r = runner.Runner(config)
         r.context = Mock()
@@ -914,13 +915,13 @@ class TestFeatureDirectoryLayout2(object):
                 with r.path_manager:
                     r.setup_paths()
 
-        ok_(('isdir',  os.path.join(fs.base, 'features', 'steps'))  in fs.calls)
+        ok_(('isdir', os.path.join(fs.base, 'features', 'steps')) in fs.calls)
         ok_(('isfile', os.path.join(fs.base, 'features', 'group1', 'foo.feature')) in fs.calls)
         eq_(r.base_dir, fs.join(fs.base, "features"))
 
     def test_supplied_feature_file_no_steps(self):
         config = Mock()
-        config.paths = [ 'features/group1/foo.feature' ]
+        config.paths = ['features/group1/foo.feature']
         config.verbose = True
         r = runner.Runner(config)
 
@@ -937,7 +938,7 @@ class TestFeatureDirectoryLayout2(object):
 
     def test_supplied_feature_directory(self):
         config = Mock()
-        config.paths = [ 'features/group1' ]
+        config.paths = ['features/group1']
         config.verbose = True
         r = runner.Runner(config)
 
@@ -953,13 +954,12 @@ class TestFeatureDirectoryLayout2(object):
                 with r.path_manager:
                     r.setup_paths()
 
-        ok_(('isdir',  os.path.join(fs.base, 'features', 'steps')) in fs.calls)
+        ok_(('isdir', os.path.join(fs.base, 'features', 'steps')) in fs.calls)
         eq_(r.base_dir, os.path.join(fs.base, 'features'))
-
 
     def test_supplied_feature_directory_no_steps(self):
         config = Mock()
-        config.paths = [ 'features/group1' ]
+        config.paths = ['features/group1']
         config.verbose = True
         r = runner.Runner(config)
 
@@ -973,5 +973,4 @@ class TestFeatureDirectoryLayout2(object):
             with patch('os.walk', fs.walk):
                 assert_raises(ConfigError, r.setup_paths)
 
-        ok_(('isdir',  os.path.join(fs.base, 'features', 'steps')) in fs.calls)
-
+        ok_(('isdir', os.path.join(fs.base, 'features', 'steps')) in fs.calls)

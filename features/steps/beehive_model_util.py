@@ -11,7 +11,8 @@ from beehive.configuration import Configuration
 # -----------------------------------------------------------------------------
 def convert_comma_list(text):
     text = text.strip()
-    return [part.strip()  for part in text.split(",")]
+    return [part.strip() for part in text.split(",")]
+
 
 def convert_model_element_tags(text):
     return parse_tags(text.strip())
@@ -23,6 +24,7 @@ def convert_model_element_tags(text):
 class Model(object):
     def __init__(self, features=None):
         self.features = features or []
+
 
 class BehaveModelBuilder(object):
     REQUIRED_COLUMNS = ["statement", "name"]
@@ -74,17 +76,19 @@ class BehaveModelBuilder(object):
                 self.build_unknown(statement, name, row_index=row_index)
         return Model(self.features)
 
+
 def run_model_with_cmdline(model, cmdline):
     reset_model(model.features)
     command_args = cmdline
     config = Configuration(command_args,
                            load_config=False,
-                            default_format="null",
-                            stdout_capture=False,
-                            stderr_capture=False,
-                            log_capture=False)
+                           default_format="null",
+                           stdout_capture=False,
+                           stderr_capture=False,
+                           log_capture=False)
     model_runner = ModelRunner(config, model.features)
     return model_runner.run()
+
 
 def collect_selected_and_skipped_scenarios(model):
     selected = []
@@ -98,5 +102,3 @@ def collect_selected_and_skipped_scenarios(model):
                 assert scenario.status != "untested"
                 selected.append(scenario)
     return (selected, skipped)
-
-

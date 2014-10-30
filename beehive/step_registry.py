@@ -86,6 +86,7 @@ class StepRegistry(object):
 
 registry = StepRegistry()
 
+
 # -- Create the decorators
 def setup_step_decorators(context=None, registry=registry):
     if context is None:

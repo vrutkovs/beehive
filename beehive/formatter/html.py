@@ -50,6 +50,7 @@ def _valid_XML_char_ordinal(i):
 #     reparsed = minidom.parseString(rough_string)
 #     return reparsed.toprettyxml(indent="  ")
 
+
 def ET_tostring(elem, pretty_print=False):
     """Render an HTML element(tree) and optionally pretty-print it."""
 
@@ -65,6 +66,7 @@ def ET_tostring(elem, pretty_print=False):
         text_re = re.compile(r'>\n\s+([^<>\s].*?)\n\s+</', re.DOTALL)
         text = text_re.sub(r'>\g<1></', text)
     return text
+
 
 class JavascriptLibrary(object):
     collapsible = """
@@ -244,7 +246,6 @@ class HTMLFormatter(Formatter):
         expander.set('onclick', "Collapsible_expandAllFailed()")
         expander.text = u'Expand All Failed'
 
-
         self.embed_id = 0
         self.embed_in_this_step = None
         self.embed_data = None
@@ -300,8 +301,8 @@ class HTMLFormatter(Formatter):
                                    {'class': 'scenario_steps',
                                     'id': 'scenario_%s' % self.scenario_id})
 
-        self.scenario_name.set('onclick',
-                "Collapsible_toggle('scenario_%s')" % self.scenario_id)
+        self.scenario_name.set(
+            'onclick', "Collapsible_toggle('scenario_%s')" % self.scenario_id)
         self.scenario_id += 1
 
     def scenario_outline(self, outline):
@@ -366,8 +367,7 @@ class HTMLFormatter(Formatter):
         if result.error_message:
             self.embed_id += 1
             link = ET.SubElement(step, 'a', {'class': 'message'})
-            link.set("onclick",
-                    "Collapsible_toggle('embed_%s')" % self.embed_id)
+            link.set("onclick", "Collapsible_toggle('embed_%s')" % self.embed_id)
             link.text = u'Error message'
 
             embed = ET.SubElement(step, 'pre',
@@ -411,7 +411,7 @@ class HTMLFormatter(Formatter):
                                    'width': '320',
                                    'controls': ''})
             embed.tail = u'    '
-            ET.SubElement(embed, 'source',{
+            ET.SubElement(embed, 'source', {
                           'src': u'data:%s;base64,%s' % (mime_type, base64.b64encode(data)),
                           'type': '%s; codecs="vp8 vorbis"' % mime_type})
 

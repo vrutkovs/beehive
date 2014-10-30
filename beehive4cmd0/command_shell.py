@@ -26,6 +26,8 @@ import codecs
 # -----------------------------------------------------------------------------
 # CLASSES:
 # -----------------------------------------------------------------------------
+
+
 class CommandResult(object):
     """
     ValueObject to store the results of a subprocess command call.
@@ -95,12 +97,12 @@ class Command(object):
         # -- RUN COMMAND:
         try:
             process = subprocess.Popen(cmdargs,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            universal_newlines=True,
-                            cwd=cwd, **kwargs)
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE,
+                                       universal_newlines=True,
+                                       cwd=cwd, **kwargs)
             out, err = process.communicate()
-            if sys.version_info[0] < 3: # py3: we get unicode strings, py2 not
+            if sys.version_info[0] < 3:  # py3: we get unicode strings, py2 not
                 # XXX-DISABLED:
                 # try:
                 #    # jython may not have it
@@ -126,12 +128,12 @@ class Command(object):
         return command_result
 
 
-
 # -----------------------------------------------------------------------------
 # FUNCTIONS:
 # -----------------------------------------------------------------------------
 def run(command, cwd=".", **kwargs):
     return Command.run(command, cwd=cwd, **kwargs)
+
 
 def beehive(cmdline, cwd=".", **kwargs):
     """

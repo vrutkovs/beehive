@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class TagExpression(object):
     """
     Tag expression, as logical boolean expression, to select
@@ -87,12 +88,12 @@ class TagExpression(object):
         element_tags = set(tags)
 
         def test_tag(xtag):
-            if xtag.startswith('-'): # -- or xtag.startswith('~'):
+            if xtag.startswith('-'):  # -- or xtag.startswith('~'):
                 return xtag[1:] not in element_tags
             return xtag in element_tags
 
         # -- EVALUATE: (or_expr1) and (or_expr2) and ...
-        return all(any(test_tag(xtag) for xtag in ors)  for ors in self.ands)
+        return all(any(test_tag(xtag) for xtag in ors) for ors in self.ands)
 
     def __len__(self):
         return len(self.ands)

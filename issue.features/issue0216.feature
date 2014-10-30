@@ -97,7 +97,7 @@ Feature: Issue #216: ANSI escape sequences are used while using --wip option
 
         @wip
         Scenario: Alice            # features/scenario_with_undefined_steps.feature:4
-          Given a step passes      # ../beehive4cmd0/passing_steps.py:22
+          Given a step passes      # ../beehive4cmd0/passing_steps.py:23
           When a step is undefined # None
           Then a step passes       # None
       """
@@ -120,7 +120,7 @@ Feature: Issue #216: ANSI escape sequences are used while using --wip option
 
         @wip
         Scenario: Alice            # features/scenario_with_undefined_steps.feature:4
-          Given a step passes      # ../beehive4cmd0/passing_steps.py:22
+          Given a step passes      # ../beehive4cmd0/passing_steps.py:23
           When a step is undefined # None
           Then a step passes       # None
       """

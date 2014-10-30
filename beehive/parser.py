@@ -26,6 +26,7 @@ def parse_feature(data, language=None, filename=None):
 
     return result
 
+
 def parse_steps(text, language=None, filename=None):
     """
     Parse a number of steps a multi-line text from a scenario.
@@ -43,6 +44,7 @@ def parse_steps(text, language=None, filename=None):
         e.filename = filename
         raise
     return result
+
 
 def parse_tags(text):
     """
@@ -174,7 +176,6 @@ class Parser(object):
         #   E1103   Instance of 'Background' has no 'examples' member
         #           (but some types could not be inferred).
         self.statement.examples.append(self.examples)
-
 
     def diagnose_feature_usage_error(self):
         if self.feature:
@@ -405,9 +406,9 @@ class Parser(object):
         # -- BETTER DIAGNOSTICS: May remove non-whitespace in execute_steps()
         removed_line_prefix = line[:self.multiline_leading]
         if removed_line_prefix.strip():
-            message  = "BAD-INDENT in multiline text: "
+            message = "BAD-INDENT in multiline text: "
             message += "Line '%s' would strip leading '%s'" % \
-                        (line, removed_line_prefix)
+                       (line, removed_line_prefix)
             raise ParserError(message, self.line, self.filename)
         return True
 
@@ -526,4 +527,3 @@ class Parser(object):
             self.action_table("")
         steps = self.statement.steps
         return steps
-

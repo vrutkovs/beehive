@@ -69,7 +69,7 @@ class JUnitReporter(Reporter):
     Generates JUnit-like XML test report for beehive.
     """
     show_multiline = True
-    show_timings   = True     # -- Show step timings.
+    show_timings = True     # -- Show step timings.
 
     def make_feature_filename(self, feature):
         filename = None
@@ -86,10 +86,10 @@ class JUnitReporter(Reporter):
 
     # -- REPORTER-API:
     def feature(self, feature):
-        filename  = self.make_feature_filename(feature)
+        filename = self.make_feature_filename(feature)
         classname = filename
-        report    = FeatureReportData(feature, filename)
-        filename  = 'TESTS-%s.xml' % filename
+        report = FeatureReportData(feature, filename)
+        filename = 'TESTS-%s.xml' % filename
 
         suite = ElementTree.Element('testsuite')
         suite.set('name', '%s.%s' % (classname, feature.name or feature.filename))
@@ -144,7 +144,7 @@ class JUnitReporter(Reporter):
         """
         for step in steps:
             assert isinstance(step, Step), \
-                "TYPE-MISMATCH: step.class=%s"  % step.__class__.__name__
+                "TYPE-MISMATCH: step.class=%s" % step.__class__.__name__
             if step.status == status:
                 return step
         # -- OTHERWISE: No step with the given status found.
@@ -156,7 +156,7 @@ class JUnitReporter(Reporter):
         status = str(step.status)
         if cls.show_timings:
             status += u" in %0.3fs" % step.duration
-        text  = u'%s %s ... ' % (step.keyword, step.name)
+        text = u'%s %s ... ' % (step.keyword, step.name)
         text += u'%s\n' % status
         if cls.show_multiline:
             prefix = make_indentation(2)
@@ -175,9 +175,9 @@ class JUnitReporter(Reporter):
         :param scenario:  Scenario that was tested.
         :return: Textual description of the scenario.
         """
-        header_line  = u'\n@scenario.begin\n'
+        header_line = u'\n@scenario.begin\n'
         header_line += '  %s: %s\n' % (scenario.keyword, scenario.name)
-        footer_line  = u'\n@scenario.end\n' + u'-' * 80 + '\n'
+        footer_line = u'\n@scenario.end\n' + u'-' * 80 + '\n'
         text = u''
         for step in scenario:
             text += cls.describe_step(step)
@@ -206,7 +206,7 @@ class JUnitReporter(Reporter):
         """
         assert isinstance(scenario, Scenario)
         assert not isinstance(scenario, ScenarioOutline)
-        feature   = report.feature
+        feature = report.feature
         classname = report.classname
         report.counts_tests += 1
 
@@ -261,7 +261,7 @@ class JUnitReporter(Reporter):
 
         # Create stdout section for each test case
         stdout = ElementTree.Element('system-out')
-        text  = self.describe_scenario(scenario)
+        text = self.describe_scenario(scenario)
 
         # Append the captured standard output
         if scenario.stdout:

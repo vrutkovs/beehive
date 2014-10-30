@@ -150,6 +150,8 @@ command_mkdir.setup_parser = setup_parser_mkdir
 # SUBCOMMAND: py2to3
 # -----------------------------------------------------------------------------
 command_py2to4_work_around3k = True
+
+
 def command_py2to3(args):
     """
     Apply '2to3' tool (Python2 to Python3 conversion tool) to Python sources.
@@ -170,11 +172,11 @@ def command_py2to3(args):
 def setup_parser4py2to3(parser):
     if command_py2to4_work_around3k:
         parser.add_argument("--no-diffs", action="store_true",
-                          help="Don't show diffs of the refactoring")
+                            help="Don't show diffs of the refactoring")
         parser.add_argument("-w", "--write", action="store_true",
-                          help="Write back modified files")
+                            help="Write back modified files")
         parser.add_argument("-n", "--nobackups", action="store_true", default=False,
-                          help="Don't write backups for modified files.")
+                            help="Don't write backups for modified files.")
     parser.add_argument("sources", nargs="+", help="Source files.")
 
 
@@ -237,7 +239,6 @@ class Command(object):
 # -----------------------------------------------------------------------------
 def toxcmd_main(args=None):
     """Command util with subcommands for tox environments."""
-    usage = "USAGE: %(prog)s [OPTIONS] COMMAND args..."
     if args is None:
         args = sys.argv[1:]
 

@@ -35,7 +35,6 @@ class StepsModule(object):
         self._name = None
         self._filename = None
 
-
     @property
     def name(self):
         if self._name is None:
@@ -238,10 +237,10 @@ The following step definitions are provided here.
         headings = [u"Step Definition", u"Given", u"When", u"Then", u"Step"]
         table = Table(headings)
         step_type_cols = {
-            "given": [u"  x", u"  ",  u"  ",  u"  "],
-            "when":  [u"  ",  u"  x", u"  ",  u"  "],
-            "then":  [u"  ",  u"  ",  u"  x", u"  "],
-            "step":  [u"  x", u"  x", u"  x", u"  x"],
+            "given": [u"  x", u"  ", u"  ", u"  "],
+            "when": [u"  ", u"  x", u"  ", u"  "],
+            "then": [u"  ", u"  ", u"  x", u"  "],
+            "step": [u"  x", u"  x", u"  x", u"  x"],
         }
         for step_definition in step_definitions:
             row = [self.describe_step_definition(step_definition)]

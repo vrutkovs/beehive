@@ -13,7 +13,7 @@ REQUIRES:
   argparse
 """
 
-__author__  = "Jens Engel"
+__author__ = "Jens Engel"
 __version__ = "0.1.0"
 
 from jsonschema import validate
@@ -34,7 +34,7 @@ except ImportError:
 # CONSTANTS:
 # -----------------------------------------------------------------------------
 HERE = os.path.dirname(__file__)
-TOP  = os.path.normpath(os.path.join(HERE, ".."))
+TOP = os.path.normpath(os.path.join(HERE, ".."))
 SCHEMA = os.path.join(TOP, "etc", "json", "beehive.json-schema")
 
 
@@ -65,8 +65,8 @@ def main(args=None):
         default_schema = SCHEMA
 
     parser = argparse.ArgumentParser(
-                description=textwrap.dedent(main.__doc__),
-                formatter_class=argparse.RawDescriptionHelpFormatter
+        description=textwrap.dedent(main.__doc__),
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument("-v", "--version",
                         action="version", version=__version__)
@@ -77,8 +77,8 @@ def main(args=None):
     parser.add_argument("files", nargs="+", metavar="JSON_FILE",
                         help="JSON file to check.")
     parser.set_defaults(
-            schema=default_schema,
-            encoding="UTF-8"
+        schema=default_schema,
+        encoding="UTF-8"
     )
     options = parser.parse_args(args)
     if not options.schema:

@@ -8,7 +8,7 @@ Utility to retrieve runtime information from beehive's JSON output.
 REQUIRES: Python >= 2.6 (json module is part of Python standard library)
 """
 
-__author__    = "Jens Engel"
+__author__ = "Jens Engel"
 
 
 # -- IMPORTS:
@@ -67,7 +67,6 @@ class JsonParser(object):
             self.add_feature_element(feature, json_element)
         return feature
 
-
     def add_feature_element(self, feature, json_element):
         datatype = json_element.get("type", u"")
         category = datatype.lower()
@@ -87,7 +86,6 @@ class JsonParser(object):
         else:
             raise KeyError("Invalid feature-element keyword: %s" % category)
 
-
     def parse_background(self, json_element):
         """
         self.add_feature_element({
@@ -97,7 +95,7 @@ class JsonParser(object):
         })
         """
         keyword = json_element.get("keyword", u"")
-        name    = json_element.get("name", u"")
+        name = json_element.get("name", u"")
         location = json_element.get("location", u"")
         json_steps = json_element.get("steps", [])
         steps = self.parse_steps(json_steps)
@@ -116,9 +114,9 @@ class JsonParser(object):
         })
         """
         keyword = json_element.get("keyword", u"")
-        name    = json_element.get("name", u"")
+        name = json_element.get("name", u"")
         description = json_element.get("description", [])
-        tags    = json_element.get("tags", [])
+        tags = json_element.get("tags", [])
         location = json_element.get("location", u"")
         json_steps = json_element.get("steps", [])
         steps = self.parse_steps(json_steps)
@@ -139,9 +137,9 @@ class JsonParser(object):
         })
         """
         keyword = json_element.get("keyword", u"")
-        name    = json_element.get("name", u"")
+        name = json_element.get("name", u"")
         description = json_element.get("description", [])
-        tags    = json_element.get("tags", [])
+        tags = json_element.get("tags", [])
         location = json_element.get("location", u"")
         json_steps = json_element.get("steps", [])
         json_examples = json_element.get("examples", [])
@@ -150,8 +148,9 @@ class JsonParser(object):
         if json_examples:
             examples = self.parse_examples(json_examples)
         filename, line = location.split(":")
-        scenario_outline = model.ScenarioOutline(filename, line, keyword, name,
-                                tags=tags, steps=steps, examples=examples)
+        scenario_outline = model.ScenarioOutline(
+            filename, line, keyword, name,
+            tags=tags, steps=steps, examples=examples)
         scenario_outline.description = description
         return scenario_outline
 
@@ -179,7 +178,7 @@ class JsonParser(object):
         element['steps'].append(s)
         """
         keyword = json_element.get("keyword", u"")
-        name    = json_element.get("name", u"")
+        name = json_element.get("name", u"")
         step_type = json_element.get("step_type", u"")
         location = json_element.get("location", u"")
         text = json_element.get("text", None)
@@ -206,7 +205,7 @@ class JsonParser(object):
             'duration': result.duration,
         }
         """
-        status   = json_result.get("status", u"")
+        status = json_result.get("status", u"")
         duration = json_result.get("duration", 0)
         error_message = json_result.get("error_message", None)
         if isinstance(error_message, list):
@@ -224,10 +223,9 @@ class JsonParser(object):
         return table_data
         """
         headings = json_table.get("headings", [])
-        rows    = json_table.get("rows", [])
+        rows = json_table.get("rows", [])
         table = model.Table(headings, rows=rows)
         return table
-
 
     def parse_examples(self, json_element):
         """
@@ -244,7 +242,7 @@ class JsonParser(object):
         element['examples'].append(e)
         """
         keyword = json_element.get("keyword", u"")
-        name    = json_element.get("name", u"")
+        name = json_element.get("name", u"")
         location = json_element.get("location", u"")
 
         table = None
@@ -254,5 +252,3 @@ class JsonParser(object):
         filename, line = location.split(":")
         examples = model.Examples(filename, line, keyword, name, table)
         return examples
-
-

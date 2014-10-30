@@ -16,11 +16,12 @@ if has_combinations:
 
     def all_combinations(items):
         variants = []
-        for n in range(len(items)+1):
+        for n in range(len(items) + 1):
             variants.extend(itertools.combinations(items, n))
         return variants
 
     NO_TAGS = "__NO_TAGS__"
+
     def make_tags_line(tags):
         """
         Convert into tags-line as in feature file.
@@ -30,6 +31,7 @@ if has_combinations:
         return NO_TAGS
 
     TestCase = object
+
     # ----------------------------------------------------------------------------
     # TEST: all_combinations() test helper
     # ----------------------------------------------------------------------------
@@ -62,7 +64,6 @@ if has_combinations:
             tools.eq_(actual, expected)
             tools.eq_(len(actual), 8)
 
-
     # ----------------------------------------------------------------------------
     # COMPLICATED TESTS FOR: TagExpression logic
     # ----------------------------------------------------------------------------
@@ -70,16 +71,15 @@ if has_combinations:
 
         def assert_tag_expression_matches(self, tag_expression,
                                           tag_combinations, expected):
-            matched = [ make_tags_line(c) for c in tag_combinations
-                                if tag_expression.check(c) ]
+            matched = [make_tags_line(c) for c in tag_combinations
+                       if tag_expression.check(c)]
             tools.eq_(matched, expected)
 
         def assert_tag_expression_mismatches(self, tag_expression,
-                                            tag_combinations, expected):
-            mismatched = [ make_tags_line(c) for c in tag_combinations
-                                if not tag_expression.check(c) ]
+                                             tag_combinations, expected):
+            mismatched = [make_tags_line(c) for c in tag_combinations
+                          if not tag_expression.check(c)]
             tools.eq_(mismatched, expected)
-
 
     class TestTagExpressionWith1Term(TagExpressionTestCase):
         """
@@ -189,7 +189,6 @@ if has_combinations:
             self.assert_tag_expression_matches(tag_expression,
                                                self.tag_combinations, expected)
 
-
     class TestTagExpressionWith3Terms(TagExpressionTestCase):
         """
         ALL_COMBINATIONS[16] with: @foo @bar @zap @other
@@ -235,7 +234,7 @@ if has_combinations:
                 # -- WITH 4 tags: None
             ]
             self.assert_tag_expression_mismatches(tag_expression,
-                                               self.tag_combinations, mismatched)
+                                                  self.tag_combinations, mismatched)
 
         def test_matches__foo_or_not_bar_or_zap(self):
             tag_expression = TagExpression(["@foo,-@bar,@zap"])
@@ -267,8 +266,7 @@ if has_combinations:
                 # -- WITH 4 tags: None
             ]
             self.assert_tag_expression_mismatches(tag_expression,
-                                               self.tag_combinations, mismatched)
-
+                                                  self.tag_combinations, mismatched)
 
         def test_matches__foo_or_not_bar_or_not_zap(self):
             tag_expression = TagExpression(["foo,-@bar,-@zap"])
@@ -299,7 +297,7 @@ if has_combinations:
                 # -- WITH 4 tags: None
             ]
             self.assert_tag_expression_mismatches(tag_expression,
-                                               self.tag_combinations, mismatched)
+                                                  self.tag_combinations, mismatched)
 
         def test_matches__not_foo_or_not_bar_or_not_zap(self):
             tag_expression = TagExpression(["-@foo,-@bar,-@zap"])
@@ -330,7 +328,7 @@ if has_combinations:
                 "@foo @bar @zap @other",
             ]
             self.assert_tag_expression_mismatches(tag_expression,
-                                               self.tag_combinations, mismatched)
+                                                  self.tag_combinations, mismatched)
 
         def test_matches__foo_and_bar_or_zap(self):
             tag_expression = TagExpression(["@foo", "@bar,@zap"])
@@ -361,7 +359,7 @@ if has_combinations:
                 # -- WITH 4 tags: None
             ]
             self.assert_tag_expression_mismatches(tag_expression,
-                                               self.tag_combinations, mismatched)
+                                                  self.tag_combinations, mismatched)
 
         def test_matches__foo_and_bar_or_not_zap(self):
             tag_expression = TagExpression(["@foo", "@bar,-@zap"])
@@ -394,7 +392,7 @@ if has_combinations:
                 # -- WITH 4 tags: None
             ]
             self.assert_tag_expression_mismatches(tag_expression,
-                                               self.tag_combinations, mismatched)
+                                                  self.tag_combinations, mismatched)
 
         def test_matches__foo_and_bar_and_zap(self):
             tag_expression = TagExpression(["@foo", "@bar", "@zap"])
@@ -425,7 +423,7 @@ if has_combinations:
                 # -- WITH 4 tags: None
             ]
             self.assert_tag_expression_mismatches(tag_expression,
-                                               self.tag_combinations, mismatched)
+                                                  self.tag_combinations, mismatched)
 
         def test_matches__not_foo_and_not_bar_and_not_zap(self):
             tag_expression = TagExpression(["-@foo", "-@bar", "-@zap"])
@@ -457,4 +455,4 @@ if has_combinations:
                 "@foo @bar @zap @other",
             ]
             self.assert_tag_expression_mismatches(tag_expression,
-                                               self.tag_combinations, mismatched)
+                                                  self.tag_combinations, mismatched)

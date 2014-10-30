@@ -2,6 +2,7 @@
 
 from beehive.formatter.base import Formatter
 
+
 class NullFormatter(Formatter):
     """
     Provides formatter that does not output anything.

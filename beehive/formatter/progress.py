@@ -13,6 +13,7 @@ from beehive.formatter.base import Formatter
 from beehive.compat.os_path import relpath
 import os
 
+
 # -----------------------------------------------------------------------------
 # CLASS: ProgressFormatterBase
 # -----------------------------------------------------------------------------
@@ -24,11 +25,11 @@ class ProgressFormatterBase(Formatter):
     """
     # -- MAP: step.status to short dot_status representation.
     dot_status = {
-        "passed":    ".",
-        "failed":    "F",
-        "error":     "E",   # Caught exception, but not an AssertionError
-        "skipped":   "S",
-        "untested":  "_",
+        "passed": ".",
+        "failed": "F",
+        "error": "E",   # Caught exception, but not an AssertionError
+        "skipped": "S",
+        "untested": "_",
         "undefined": "U",
     }
 
@@ -38,13 +39,13 @@ class ProgressFormatterBase(Formatter):
         self.stream = self.open()
         self.steps = []
         self.failures = []
-        self.current_feature  = None
+        self.current_feature = None
         self.current_scenario = None
 
     def reset(self):
         self.steps = []
         self.failures = []
-        self.current_feature  = None
+        self.current_feature = None
         self.current_scenario = None
 
     # -- FORMATTER API:
@@ -160,15 +161,15 @@ class StepProgressFormatter(ProgressFormatterBase):
         """
         dot_status = self.dot_status[result.status]
         if result.status == "failed":
-            if (result.exception and
-                not isinstance(result.exception, AssertionError)):
+            if (result.exception and not isinstance(result.exception, AssertionError)):
                 # -- ISA-ERROR: Some Exception
                 dot_status = self.dot_status["error"]
-            result.feature  = self.current_feature
+            result.feature = self.current_feature
             result.scenario = self.current_scenario
             self.failures.append(result)
         self.stream.write(dot_status)
         self.stream.flush()
+
 
 # -----------------------------------------------------------------------------
 # CLASS: ScenarioStepProgressFormatter
@@ -230,11 +231,8 @@ class ScenarioStepProgressFormatter(StepProgressFormatter):
             separator = "-" * 80
             self.stream.write(u"\n%s\n" % separator)
             for failure in self.failures:
-                self.stream.write(u"FAILURE in step '%s' (%s):\n" % \
+                self.stream.write(u"FAILURE in step '%s' (%s):\n" %
                                   (failure.name, failure.location))
                 self.stream.write(u"%s\n" % failure.error_message)
                 self.stream.write(u"%s\n" % separator)
             self.stream.flush()
-
-
-

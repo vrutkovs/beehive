@@ -259,6 +259,7 @@ class FeatureListParser(object):
         contents = open(filename).read()
         return cls.parse(contents, here)
 
+
 # -----------------------------------------------------------------------------
 # FUNCTIONS:
 # -----------------------------------------------------------------------------

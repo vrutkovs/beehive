@@ -16,13 +16,13 @@ from beehive.formatter.base import StreamOpener
 from beehive.formatter.formatters import formatters as registered_formatters
 
 
-class Unknown(object): pass
+class Unknown(object):
+    pass
+
 
 class LogLevel(object):
-    names = [
-         "NOTSET", "CRITICAL", "FATAL", "ERROR",
-         "WARNING", "WARN", "INFO", "DEBUG",
-    ]
+    names = ["NOTSET", "CRITICAL", "FATAL", "ERROR",
+             "WARNING", "WARN", "INFO", "DEBUG"]
 
     @staticmethod
     def parse(levelname, unknown_level=None):
@@ -113,10 +113,6 @@ options = [
     ((),  # -- CONFIGFILE only
      dict(dest='css',
           help="""Specify a different css for HTML formatter""")),
-
-#    (('-g', '--guess'),
-#     dict(action='store_true',
-#          help="Guess best match for ambiguous steps.")),
 
     (('-k', '--no-skipped'),
      dict(action='store_false', dest='show_skipped',
@@ -334,6 +330,7 @@ raw_value_options = frozenset([
     # -- MAYBE: "scenario_outline_annotation_schema",
 ])
 
+
 def read_configuration(path):
     cfg = configparser.SafeConfigParser()
     cfg.read(path)
@@ -431,7 +428,7 @@ for fixed, keywords in options:
         del keywords['config_help']
     parser.add_argument(*fixed, **keywords)
 parser.add_argument('paths', nargs='*',
-                help='Feature directory, file or file location (FILE:LINE).')
+                    help='Feature directory, file or file location (FILE:LINE).')
 
 
 class Configuration(object):

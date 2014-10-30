@@ -36,6 +36,7 @@ BEEHIVE = os.path.join(HERE, "beehive")
 README = os.path.join(HERE, "README.md")
 description = "".join(open(README).readlines()[4:])
 
+
 # -----------------------------------------------------------------------------
 # UTILITY:
 # -----------------------------------------------------------------------------
@@ -45,8 +46,8 @@ def find_packages_by_root_package(where):
     collect only what is needed.
     """
     root_package = os.path.basename(where)
-    packages = [ "%s.%s" % (root_package, sub_package)
-                 for sub_package in find_packages(where)]
+    packages = ["%s.%s" % (root_package, sub_package)
+                for sub_package in find_packages(where)]
     packages.insert(0, root_package)
     return packages
 
@@ -62,9 +63,9 @@ setup(
     author="Benno Rice, Richard Jones, Jens Engel, Vadim Rutkovsky",
     author_email="roignac@gmail.com",
     url="http://github.com/vrutkovs/beehive",
-    provides = ["beehive", "setuptools_beehive"],
-    packages = find_packages_by_root_package(BEEHIVE),
-    py_modules = ["setuptools_beehive"],
+    provides=["beehive", "setuptools_beehive"],
+    packages=find_packages_by_root_package(BEEHIVE),
+    py_modules=["setuptools_beehive"],
     entry_points={
         "console_scripts": [
             "beehive = beehive.__main__:main"
@@ -76,10 +77,10 @@ setup(
     install_requires=requirements,
     test_suite="nose.collector",
     tests_require=["nose>=1.3", "mock>=1.0", "PyHamcrest>=1.8"],
-    cmdclass = {
+    cmdclass={
         "beehive_test": beehive_test,
     },
-    use_2to3= bool(python_version >= 3.0),
+    use_2to3=bool(python_version >= 3.0),
     license="BSD",
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -95,7 +96,5 @@ setup(
         "Topic :: Software Development :: Testing",
         "License :: OSI Approved :: BSD License",
     ],
-    zip_safe = True,
+    zip_safe=True,
 )
-
-

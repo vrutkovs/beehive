@@ -1,8 +1,9 @@
 from mock import Mock, patch
-from nose.tools import *
+from nose.tools import eq_
 
-from beehive.model import ScenarioOutline, Scenario
+from beehive.model import ScenarioOutline
 from beehive.reporter.summary import SummaryReporter, format_summary
+
 
 class TestFormatStatus(object):
     def test_passed_entry_contains_label(self):
@@ -51,6 +52,7 @@ class TestFormatStatus(object):
         assert '1 skipped' in output
         assert '2 failed' in output
         assert 'undefined' not in output
+
 
 class TestSummaryReporter(object):
     @patch('sys.stdout')
@@ -159,9 +161,9 @@ class TestSummaryReporter(object):
     def test_scenario_outline_status_is_collected_and_reported(self, stdout,
                                                                format_summary):
         feature = Mock()
-        scenarios = [ ScenarioOutline(u"<string>", 0, u"scenario_outline", u"name"),
-                      Mock(), Mock(), Mock() ]
-        subscenarios = [ Mock(), Mock(), Mock(), Mock() ]
+        scenarios = [ScenarioOutline(u"<string>", 0, u"scenario_outline", u"name"),
+                     Mock(), Mock(), Mock()]
+        subscenarios = [Mock(), Mock(), Mock(), Mock()]
         subscenarios[0].status = 'passed'
         subscenarios[0].__iter__ = Mock(return_value=iter([]))
         subscenarios[1].status = 'failed'
@@ -192,7 +194,7 @@ class TestSummaryReporter(object):
             'failed': 3,
             'skipped': 2,
             'untested': 0,
-            }
+        }
 
         eq_(format_summary.call_args_list[1][0], ('scenario', expected))
 

@@ -6,8 +6,7 @@ from beehive.configuration import Configuration
 from beehive.compat.collections import OrderedDict
 from beehive import step_registry
 from mock import Mock, patch
-from nose.tools import *
-import re
+from nose.tools import raises, eq_
 import sys
 import unittest
 
@@ -195,7 +194,7 @@ class TestScenarioRun(unittest.TestCase):
 
         steps = [
             Mock(step_type="given", name="step0"),
-            Mock(step_type="then",  name="step1"),
+            Mock(step_type="then", name="step1"),
         ]
         scenario = model.Scenario('foo.feature', 17, u'Scenario', u'foo',
                                   steps=steps)
@@ -255,6 +254,7 @@ class TestScenarioRun(unittest.TestCase):
         self.config.name_re = Configuration.build_name_re(self.config.name)
 
         assert scenario.should_run_with_name_select(self.config)
+
 
 class TestScenarioOutline(unittest.TestCase):
     def test_run_calls_run_on_each_generated_scenario(self):
@@ -316,7 +316,7 @@ class TestScenarioOutline(unittest.TestCase):
             scenario.run.return_value = False
 
         runner = Mock()
-        context = runner.context = Mock()
+        runner.context = Mock()
         config = runner.config = Mock()
         config.stop = True
 
@@ -332,7 +332,7 @@ class TestScenarioOutline(unittest.TestCase):
         outline._scenarios[1].run.return_value = not failed
 
         runner = Mock()
-        context = runner.context = Mock()
+        runner.context = Mock()
         config = runner.config = Mock()
         config.stop = True
 
@@ -348,7 +348,7 @@ class TestScenarioOutline(unittest.TestCase):
         outline._scenarios[1].run.return_value = failed
 
         runner = Mock()
-        context = runner.context = Mock()
+        runner.context = Mock()
         config = runner.config = Mock()
         config.stop = True
 
@@ -365,7 +365,7 @@ class TestScenarioOutline(unittest.TestCase):
         outline._scenarios[2].run.return_value = not failed
 
         runner = Mock()
-        context = runner.context = Mock()
+        runner.context = Mock()
         config = runner.config = Mock()
         config.stop = True
 
@@ -444,7 +444,7 @@ class TestStepRun(unittest.TestCase):
         self.step_registry.find_match.return_value = match
 
         side_effects = (None, raiser(AssertionError('whee')),
-                raiser(Exception('whee')))
+                        raiser(Exception('whee')))
         for side_effect in side_effects:
             match.run.side_effect = side_effect
             step.run(self.runner, quiet=True)
@@ -555,7 +555,7 @@ class TestStepRun(unittest.TestCase):
             return 17
 
         side_effects = (None, raiser(AssertionError('whee')),
-                raiser(Exception('whee')))
+                        raiser(Exception('whee')))
         for side_effect in side_effects:
             match.run.side_effect = side_effect
             time_time.side_effect = time_time_1
@@ -646,7 +646,7 @@ class TestTableModel(unittest.TestCase):
 
 
 class TestModelRow(unittest.TestCase):
-    HEAD = [u'name',  u'sex',    u'age']
+    HEAD = [u'name', u'sex', u'age']
     DATA = [u'Alice', u'female', u'12']
 
     def setUp(self):
@@ -657,8 +657,8 @@ class TestModelRow(unittest.TestCase):
 
     def test_getitem_with_valid_colname(self):
         eq_(self.row['name'], u'Alice')
-        eq_(self.row['sex'],  u'female')
-        eq_(self.row['age'],  u'12')
+        eq_(self.row['sex'], u'female')
+        eq_(self.row['age'], u'12')
 
     @raises(KeyError)
     def test_getitem_with_unknown_colname(self):
@@ -677,8 +677,8 @@ class TestModelRow(unittest.TestCase):
 
     def test_get_with_valid_colname(self):
         eq_(self.row.get('name'), u'Alice')
-        eq_(self.row.get('sex'),  u'female')
-        eq_(self.row.get('age'),  u'12')
+        eq_(self.row.get('sex'), u'female')
+        eq_(self.row.get('age'), u'12')
 
     def test_getitem_with_unknown_colname_should_return_default(self):
         eq_(self.row.get('__UNKNOWN_COLUMN__', 'XXX'), u'XXX')
@@ -693,36 +693,33 @@ class TestModelRow(unittest.TestCase):
         # assert not isinstance(data2, OrderedDict)
         eq_(data1, data2)
         eq_(data1['name'], u'Alice')
-        eq_(data1['sex'],  u'female')
-        eq_(data1['age'],  u'12')
+        eq_(data1['sex'], u'female')
+        eq_(data1['age'], u'12')
 
 
 class TestFileLocation(unittest.TestCase):
     ordered_locations1 = [
-        model.FileLocation("features/alice.feature",   1),
-        model.FileLocation("features/alice.feature",   5),
-        model.FileLocation("features/alice.feature",  10),
-        model.FileLocation("features/alice.feature",  11),
+        model.FileLocation("features/alice.feature", 1),
+        model.FileLocation("features/alice.feature", 5),
+        model.FileLocation("features/alice.feature", 10),
+        model.FileLocation("features/alice.feature", 11),
         model.FileLocation("features/alice.feature", 100),
     ]
     ordered_locations2 = [
-        model.FileLocation("features/alice.feature",     1),
-        model.FileLocation("features/alice.feature",    10),
-        model.FileLocation("features/bob.feature",       5),
+        model.FileLocation("features/alice.feature", 1),
+        model.FileLocation("features/alice.feature", 10),
+        model.FileLocation("features/bob.feature", 5),
         model.FileLocation("features/charly.feature", None),
-        model.FileLocation("features/charly.feature",    0),
-        model.FileLocation("features/charly.feature",  100),
+        model.FileLocation("features/charly.feature", 0),
+        model.FileLocation("features/charly.feature", 100),
     ]
     same_locations = [
-        ( model.FileLocation("alice.feature"),
-          model.FileLocation("alice.feature", None),
-        ),
-        ( model.FileLocation("alice.feature", 10),
-          model.FileLocation("alice.feature", 10),
-        ),
-        ( model.FileLocation("features/bob.feature", 11),
-          model.FileLocation("features/bob.feature", 11),
-        ),
+        (model.FileLocation("alice.feature"),
+         model.FileLocation("alice.feature", None),),
+        (model.FileLocation("alice.feature", 10),
+         model.FileLocation("alice.feature", 10),),
+        (model.FileLocation("features/bob.feature", 11),
+         model.FileLocation("features/bob.feature", 11),),
     ]
 
     def test_compare_equal(self):
@@ -745,7 +742,7 @@ class TestFileLocation(unittest.TestCase):
     def test_compare_less_than(self):
         for locations in [self.ordered_locations1, self.ordered_locations2]:
             for value1, value2 in zip(locations, locations[1:]):
-                assert value1  < value2, "FAILED: %s < %s" % (str(value1), str(value2))
+                assert value1 < value2, "FAILED: %s < %s" % (str(value1), str(value2))
                 assert value1 != value2
 
     def test_compare_less_than_with_string(self):
@@ -753,13 +750,13 @@ class TestFileLocation(unittest.TestCase):
         for value1, value2 in zip(locations, locations[1:]):
             if value1.filename == value2.filename:
                 continue
-            assert value1  < value2.filename, "FAILED: %s < %s" % (str(value1), str(value2.filename))
-            assert value1.filename < value2,  "FAILED: %s < %s" % (str(value1.filename), str(value2))
+            assert value1 < value2.filename, "FAILED: %s < %s" % (str(value1), str(value2.filename))
+            assert value1.filename < value2, "FAILED: %s < %s" % (str(value1.filename), str(value2))
 
     def test_compare_greater_than(self):
         for locations in [self.ordered_locations1, self.ordered_locations2]:
             for value1, value2 in zip(locations, locations[1:]):
-                assert value2  > value1, "FAILED: %s > %s" % (str(value2), str(value1))
+                assert value2 > value1, "FAILED: %s > %s" % (str(value2), str(value1))
                 assert value2 != value1
 
     def test_compare_less_or_equal(self):

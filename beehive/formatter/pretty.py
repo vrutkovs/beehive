@@ -13,6 +13,7 @@ import sys
 DEFAULT_WIDTH = 80
 DEFAULT_HEIGHT = 24
 
+
 def get_terminal_size():
     if sys.platform == 'windows':
         # Autodetecting the size of a Windows command window is left as an
@@ -78,7 +79,6 @@ class PrettyFormatter(Formatter):
         self.statement = None
         self.indentations = []
         self.step_lines = 0
-
 
     def reset(self):
         # -- UNUSED: self.tag_statement = None

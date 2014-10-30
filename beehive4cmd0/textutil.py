@@ -145,6 +145,8 @@ DEBUG = False
 # -----------------------------------------------------------------------------
 # UTILITY FUNCTIONS:
 # -----------------------------------------------------------------------------
+
+
 def template_substitute(text, **kwargs):
     """
     Replace placeholders in text by using the data mapping.
@@ -168,8 +170,9 @@ def text_remove_empty_lines(text):
       - Strip empty lines
       - Strip trailing whitespace
     """
-    lines = [ line.rstrip()  for line in text.splitlines()  if line.strip() ]
+    lines = [line.rstrip() for line in text.splitlines() if line.strip()]
     return "\n".join(lines)
+
 
 def text_normalize(text):
     """
@@ -184,8 +187,9 @@ def text_normalize(text):
     if isinstance(text, bytes):
         # -- MAYBE: command.ouput => bytes, encoded stream output.
         text = codecs.decode(text)
-    lines = [ line.strip()  for line in text.splitlines()  if line.strip() ]
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
     return "\n".join(lines)
+
 
 # -----------------------------------------------------------------------------
 # ASSERTIONS:
@@ -193,42 +197,51 @@ def text_normalize(text):
 def assert_text_should_equal(actual_text, expected_text):
     assert_that(actual_text, equal_to(expected_text))
 
+
 def assert_text_should_not_equal(actual_text, expected_text):
     assert_that(actual_text, is_not(equal_to(expected_text)))
+
 
 def assert_text_should_contain_exactly(text, expected_part):
     assert_that(text, contains_string(expected_part))
 
+
 def assert_text_should_not_contain_exactly(text, expected_part):
     assert_that(text, is_not(contains_string(expected_part)))
+
 
 def assert_text_should_contain(text, expected_part):
     assert_that(text, contains_string(expected_part))
 
+
 def assert_text_should_not_contain(text, unexpected_part):
     assert_that(text, is_not(contains_string(unexpected_part)))
 
+
 def assert_normtext_should_equal(actual_text, expected_text):
     expected_text2 = text_normalize(expected_text.strip())
-    actual_text2   = text_normalize(actual_text.strip())
+    actual_text2 = text_normalize(actual_text.strip())
     assert_that(actual_text2, equal_to(expected_text2))
+
 
 def assert_normtext_should_not_equal(actual_text, expected_text):
     expected_text2 = text_normalize(expected_text.strip())
-    actual_text2   = text_normalize(actual_text.strip())
+    actual_text2 = text_normalize(actual_text.strip())
     assert_that(actual_text2, is_not(equal_to(expected_text2)))
+
 
 def assert_normtext_should_contain(text, expected_part):
     expected_part2 = text_normalize(expected_part)
-    actual_text    = text_normalize(text.strip())
+    actual_text = text_normalize(text.strip())
     if DEBUG:
         print("expected:\n{0}".format(expected_part2))
         print("actual:\n{0}".format(actual_text))
     assert_text_should_contain(actual_text, expected_part2)
 
+
 def assert_normtext_should_not_contain(text, unexpected_part):
     unexpected_part2 = text_normalize(unexpected_part)
-    actual_text      = text_normalize(text.strip())
+    actual_text = text_normalize(text.strip())
     if DEBUG:
         print("expected:\n{0}".format(unexpected_part2))
         print("actual:\n{0}".format(actual_text))

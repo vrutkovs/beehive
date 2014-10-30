@@ -112,7 +112,7 @@ class FileLocation(object):
         elif isinstance(other, basestring):
             return self.filename == other
         else:
-            raise AttributeError("Cannot compare FileLocation with %s:%s" % \
+            raise AttributeError("Cannot compare FileLocation with %s:%s" %
                                  (type(other), other))
 
     def __ne__(self, other):
@@ -130,7 +130,7 @@ class FileLocation(object):
         elif isinstance(other, basestring):
             return self.filename < other
         else:
-            raise AttributeError("Cannot compare FileLocation with %s:%s" % \
+            raise AttributeError("Cannot compare FileLocation with %s:%s" %
                                  (type(other), other))
 
     def __le__(self, other):
@@ -455,8 +455,7 @@ class Feature(TagAndStatusStatement, Replayable):
             # -- OPTIONAL: Select scenario by name (regular expressions).
             # XXX if (runner.config.name and
             # XXX         not runner.config.name_re.search(scenario.name)):
-            if (runner.config.name and
-                     not scenario.should_run_with_name_select(runner.config)):
+            if (runner.config.name and not scenario.should_run_with_name_select(runner.config)):
                 scenario.mark_skipped()
                 continue
 
@@ -979,7 +978,7 @@ class ScenarioOutline(Scenario):
         example_data = Data(examples_name, example.index)
         row_data = Data(row.id, row.index)
         return self.annotation_schema.format(name=scenario_name,
-                                        examples=example_data, row=row_data)
+                                             examples=example_data, row=row_data)
 
     def make_row_tags(self, row, params=None):
         if not self.tags:
@@ -1026,11 +1025,11 @@ class ScenarioOutline(Scenario):
             "row.id": None,
         }
         for example_index, example in enumerate(self.examples):
-            example.index = example_index+1
-            params["examples.name"]  = example.name
+            example.index = example_index + 1
+            params["examples.name"] = example.name
             params["examples.index"] = str(example.index)
             for row_index, row in enumerate(example.table):
-                row.index = row_index+1
+                row.index = row_index + 1
                 row.id = "%d.%d" % (example.index, row.index)
                 params["row.id"] = row.id
                 params["row.index"] = str(row.index)
@@ -1103,7 +1102,7 @@ class ScenarioOutline(Scenario):
         :return: True, if scenario should run. False, otherwise (skip it).
         """
         if not config.name:
-            return True # -- SELECT-ALL: Select by name is not specified.
+            return True  # -- SELECT-ALL: Select by name is not specified.
 
         for scenario in self.scenarios:
             if scenario.should_run_with_name_select(config):

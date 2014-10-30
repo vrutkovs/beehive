@@ -1,8 +1,9 @@
 from __future__ import with_statement
 
 from mock import Mock, patch
-from nose.tools import *
+from nose.tools import eq_
 from beehive import step_registry
+
 
 class TestStepRegistry(object):
     def test_add_step_definition_adds_to_lowercased_keyword(self):
@@ -86,4 +87,3 @@ class TestStepRegistry(object):
         wrapper = decorator(string)
         assert wrapper(func) is func
         add_step_definition.assert_called_with(step_type, string, func)
-

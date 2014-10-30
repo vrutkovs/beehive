@@ -61,7 +61,7 @@ class DocumentWriter(object):
 
     def write_toctree(self, entries, title=None, maxdepth=2):
         if title is None:
-            title  = self.default_toctree_title
+            title = self.default_toctree_title
         line_prefix = " " * 4
         if title:
             self.stream.write("%s\n\n" % title)

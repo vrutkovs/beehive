@@ -5,6 +5,6 @@ import os.path
 # -----------------------------------------------------------------------------
 # CONSTANTS:
 # -----------------------------------------------------------------------------
-HERE    = os.path.dirname(__file__)
-TOP     = os.path.join(HERE, "..")
-TOPA    = os.path.abspath(TOP)
+HERE = os.path.dirname(__file__)
+TOP = os.path.join(HERE, "..")
+TOPA = os.path.abspath(TOP)

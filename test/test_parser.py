@@ -1,13 +1,15 @@
 #-*- encoding: UTF-8 -*-
 
-from nose.tools import *
+from nose.tools import raises, eq_, assert_raises
 
 from beehive import i18n, model, parser
+
 
 class Common(object):
     def compare_steps(self, steps, expected):
         have = [(s.step_type, s.keyword, s.name, s.text, s.table) for s in steps]
         eq_(have, expected)
+
 
 class TestParser(Common):
     def test_parses_feature_name(self):
@@ -471,7 +473,7 @@ Feature: Multiline
         text2 = "Alpha.\n\nOmega."
         self.compare_steps(feature.scenarios[0].steps, [
             ('given', 'Given', 'a multiline argument with', text1, None),
-            ('given', 'And',   'a multiline argument with', text2, None),
+            ('given', 'And', 'a multiline argument with', text2, None),
             ('then', 'Then', 'empty middle lines are not stripped', None, None),
         ])
 
@@ -744,8 +746,7 @@ Feature: Stuff
         eq_(feature.scenarios[0].tags, [model.Tag(u'fred', 1)])
         string = '\n'.join([
             'Yarr, my hovercraft be full of stuff.',
-            "Also, I be feelin' this pirate schtick be a mite overdone, " + \
-                "me hearties.",
+            "Also, I be feelin' this pirate schtick be a mite overdone, me hearties.",
             '    Also: rum.'
         ])
         self.compare_steps(feature.scenarios[0].steps, [
@@ -818,7 +819,6 @@ Feature: Stuff
             ('then', 'Then', 'we have <Things>', None, None),
         ])
 
-
     def test_fails_to_parse_when_and_is_out_of_order(self):
         doc = u"""
 Feature: Stuff
@@ -848,6 +848,7 @@ Feature: Stuff
       | Fail | Wheel|
 """.lstrip()
         assert_raises(parser.ParserError, parser.parse_feature, doc)
+
 
 class TestForeign(Common):
     def test_first_line_comment_sets_language(self):
@@ -1057,7 +1058,6 @@ Feature: Scenario Description
             ('then', 'Then', 'we have things', None, None),
         ])
 
-
     def test_parse_scenario_with_description_but_without_steps(self):
         doc = u'''
 Feature: Scenario Description
@@ -1092,7 +1092,6 @@ Feature: Scenario Description
             ('when', 'When', 'we do stuff', None, None),
             ('then', 'Then', 'we have things', None, None),
         ])
-
 
     def test_parse_scenario_with_description_but_without_steps_followed_by_scenario_with_tags(self):
         doc = u'''
@@ -1175,6 +1174,7 @@ def parse_tags(line):
     the_parser = parser.Parser()
     return the_parser.parse_tags(line.strip())
 
+
 class TestParser4Tags(Common):
 
     def test_parse_tags_with_one_tag(self):
@@ -1186,7 +1186,7 @@ class TestParser4Tags(Common):
         tags = parse_tags('@one  @two.three-four  @xxx')
         eq_(len(tags), 3)
         eq_(tags, [model.Tag(name, 1)
-            for name in (u'one', u'two.three-four', u'xxx' )])
+            for name in (u'one', u'two.three-four', u'xxx')])
 
     def test_parse_tags_with_tag_and_comment(self):
         tags = parse_tags('@one  # @fake-tag-in-comment xxx')
@@ -1197,7 +1197,7 @@ class TestParser4Tags(Common):
         tags = parse_tags('@one  @two.three-four  @xxx # @fake-tag-in-comment xxx')
         eq_(len(tags), 3)
         eq_(tags, [model.Tag(name, 1)
-                   for name in (u'one', u'two.three-four', u'xxx' )])
+                   for name in (u'one', u'two.three-four', u'xxx')])
 
     @raises(parser.ParserError)
     def test_parse_tags_with_invalid_tags(self):
@@ -1244,7 +1244,6 @@ Feature: Background
             ('then', 'Then', 'we have things', None, None),
         ])
 
-
     def test_parse_background_with_tags_should_fail(self):
         doc = u'''
 Feature: Background with tags
@@ -1257,7 +1256,6 @@ Feature: Background with tags
     Given we init stuff
 '''.lstrip()
         assert_raises(parser.ParserError, parser.parse_feature, doc)
-
 
     def test_parse_two_background_should_fail(self):
         doc = u'''
@@ -1273,7 +1271,6 @@ Feature: Two Backgrounds
 '''.lstrip()
         assert_raises(parser.ParserError, parser.parse_feature, doc)
 
-
     def test_parse_background_after_scenario_should_fail(self):
         doc = u'''
 Feature: Background after Scenario
@@ -1287,7 +1284,6 @@ Feature: Background after Scenario
     When we init more stuff
 '''.lstrip()
         assert_raises(parser.ParserError, parser.parse_feature, doc)
-
 
     def test_parse_background_after_scenario_outline_should_fail(self):
         doc = u'''
@@ -1325,10 +1321,9 @@ Then every step will be parsed without errors
         #     SCHEMA: step_type, keyword, name, text, table
         self.compare_steps(steps, [
             ("given", "Given", "a simple step", None, None),
-            ("when",  "When",  "I have another simple step", None, None),
-            ("when",  "And",   "I have another simple step", None, None),
-            ("then",  "Then",  "every step will be parsed without errors",
-                                None, None),
+            ("when", "When", "I have another simple step", None, None),
+            ("when", "And", "I have another simple step", None, None),
+            ("then", "Then", "every step will be parsed without errors", None, None),
         ])
 
     def test_parse_steps_with_multiline_text(self):
@@ -1353,8 +1348,8 @@ Then every step will be parsed without errors
         text2 = "Ipsum lorem\nLorem ipsum"
         self.compare_steps(steps, [
             ("given", "Given", "a step with multi-line text", text1, None),
-            ("when",  "When",  "I have a step with multi-line text", text2, None),
-            ("then",  "Then",  "every step will be parsed without errors",
+            ("when", "When", "I have a step with multi-line text", text2, None),
+            ("then", "Then", "every step will be parsed without errors",
              None, None),
         ])
 
@@ -1374,7 +1369,7 @@ Then the last step has multi-line text:
         text2 = "Lorem ipsum\nIpsum lorem"
         self.compare_steps(steps, [
             ("given", "Given", "a simple step", None, None),
-            ("then",  "Then",  "the last step has multi-line text", text2, None),
+            ("then", "Then", "the last step has multi-line text", text2, None),
         ])
 
     def test_parse_steps_with_table(self):
@@ -1395,20 +1390,22 @@ Then every step will be parsed without errors
         eq_(len(steps), 3)
         # -- EXPECTED STEP DATA:
         #     SCHEMA: step_type, keyword, name, text, table
-        table1 = model.Table([u"Name", u"Age"], 0, [
-            [ u"Alice", u"12" ],
-            [ u"Bob",   u"23" ],
+        table1 = model.Table(
+            [u"Name", u"Age"], 0, [
+                [u"Alice", u"12"],
+                [u"Bob", u"23"],
             ])
-        table2 = model.Table([u"Country", u"Capital"], 0, [
-            [ u"France",   u"Paris" ],
-            [ u"Germany",  u"Berlin" ],
-            [ u"Spain",    u"Madrid" ],
-            [ u"USA",      u"Washington" ],
+        table2 = model.Table(
+            [u"Country", u"Capital"], 0, [
+                [u"France", u"Paris"],
+                [u"Germany", u"Berlin"],
+                [u"Spain", u"Madrid"],
+                [u"USA", u"Washington"],
             ])
         self.compare_steps(steps, [
             ("given", "Given", "a step with a table", None, table1),
-            ("when",  "When",  "I have a step with a table", None, table2),
-            ("then",  "Then",  "every step will be parsed without errors",
+            ("when", "When", "I have a step with a table", None, table2),
+            ("then", "Then", "every step will be parsed without errors",
              None, None),
         ])
 
@@ -1424,13 +1421,14 @@ Then the last step has a final table:
         eq_(len(steps), 2)
         # -- EXPECTED STEP DATA:
         #     SCHEMA: step_type, keyword, name, text, table
-        table2 = model.Table([u"Name", u"City"], 0, [
-            [ u"Alonso", u"Barcelona" ],
-            [ u"Bred",   u"London" ],
+        table2 = model.Table(
+            [u"Name", u"City"], 0, [
+                [u"Alonso", u"Barcelona"],
+                [u"Bred", u"London"],
             ])
         self.compare_steps(steps, [
             ("given", "Given", "a simple step", None, None),
-            ("then",  "Then",  "the last step has a final table", None, table2),
+            ("then", "Then", "the last step has a final table", None, table2),
         ])
 
     @raises(parser.ParserError)
@@ -1441,4 +1439,4 @@ Given a step with a malformed table:
     | Alonso | Barcelona | 2004 |
     | Bred   | London    | 2010 |
 '''.lstrip()
-        steps = parser.parse_steps(doc)
+        parser.parse_steps(doc)

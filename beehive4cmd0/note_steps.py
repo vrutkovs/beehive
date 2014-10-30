@@ -25,4 +25,3 @@ def step_note_that(context, remark):
     log = getattr(context, "log", None)
     if log:
         log.info(u"NOTE: %s;" % remark)
-

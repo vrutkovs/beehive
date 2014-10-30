@@ -418,9 +418,6 @@ class TestTagExpressionFooOrBarAndNotZap(unittest.TestCase):
     def test_should_not_match_tags(self):
         assert not self.e.check([])
 
-    def test_should_match_foo(self):
-        assert self.e.check(['foo'])
-
     def test_should_match_bar(self):
         assert self.e.check(['bar'])
 
@@ -480,12 +477,14 @@ class TestTagExpressionFoo3OrNotBar4AndZap5(unittest.TestCase):
     def test_should_match_foo_zap(self):
         assert self.e.check(['foo', 'zap'])
 
+
 class TestTagExpressionParsing(unittest.TestCase):
     def setUp(self):
         self.e = TagExpression([' foo:3 , -bar ', ' zap:5 '])
 
     def test_should_have_limits(self):
         tools.eq_(self.e.limits, {'zap': 5, 'foo': 3})
+
 
 class TestTagExpressionTagLimits(unittest.TestCase):
     def test_should_be_counted_for_negative_tags(self):
@@ -502,4 +501,3 @@ class TestTagExpressionTagLimits(unittest.TestCase):
     def test_should_allow_duplicate_consistent_limits(self):
         e = TagExpression(['todo:3', '-todo:3'])
         tools.eq_(e.limits, {'todo': 3})
-

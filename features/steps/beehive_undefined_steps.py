@@ -33,6 +33,7 @@ def step_undefined_step_snippets_section_exists(context):
             """
     ''')
 
+
 @then(u'an undefined-step snippet should exist for "{step}"')
 def step_undefined_step_snippet_should_exist_for(context, step):
     """
@@ -42,7 +43,7 @@ def step_undefined_step_snippet_should_exist_for(context, step):
     EXAMPLE:
         Then an undefined-step snippet should exist for "Given an undefined step"
     """
-    undefined_step_snippet  = make_undefined_step_snippet(step)
+    undefined_step_snippet = make_undefined_step_snippet(step)
     context.execute_steps(u'''\
 Then the command output should contain:
     """
@@ -57,7 +58,7 @@ def step_undefined_step_snippet_should_not_exist_for(context, step):
     Checks if an undefined-step snippet is provided for a step
     in beehive command output (last command).
     """
-    undefined_step_snippet  = make_undefined_step_snippet(step)
+    undefined_step_snippet = make_undefined_step_snippet(step)
     context.execute_steps(u'''\
 Then the command output should not contain:
     """

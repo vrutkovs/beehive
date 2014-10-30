@@ -30,17 +30,17 @@ class beehive_test(Command):
     command_name = "beehive_test"
     description = "Run feature tests with beehive"
     default_format = "progress"
-    default_args   = "features"
-    local_egg_dir  = "eggs"
+    default_args = "features"
+    local_egg_dir = "eggs"
     command_consumes_arguments = False
     user_options = [
         ("format=", "f", "Use formatter (default: %s)" % default_format),
-        ("tags=",   "t", "Use tags to select/exclude features/scenarios"),
+        ("tags=", "t", "Use tags to select/exclude features/scenarios"),
         ("dry-run", "d", "Use dry-run mode"),
         ("args=", None,
             "Features to run (default: %s)" % default_args),
     ]
-    boolean_options = [ "dry-run" ]
+    boolean_options = ["dry-run"]
 
     def initialize_options(self):
         self.format = self.default_format
@@ -80,18 +80,18 @@ class beehive_test(Command):
             os.chdir(initial_dir)
 
     def _select_paths(self, path=".", pattern="*"):
-        selected = [ os.path.join(path, f)
-                     for f in os.listdir(path)  if fnmatch(f, pattern)]
+        selected = [os.path.join(path, f)
+                    for f in os.listdir(path) if fnmatch(f, pattern)]
         return selected
 
     def _setup_env_with_local_python_path(self, egg_install_dir):
         PYTHONPATH = os.environ.get("PYTHONPATH", "")
         pathsep = os.pathsep
-        PPATH=[x for x in PYTHONPATH.split(pathsep) if x]
+        PPATH = [x for x in PYTHONPATH.split(pathsep) if x]
         PPATH.insert(0, os.getcwd())
         local_eggs = self._select_paths(egg_install_dir, "*.egg")
         if local_eggs:
-            PPATH[1:1] = [ os.path.abspath(p) for p in local_eggs]
+            PPATH[1:1] = [os.path.abspath(p) for p in local_eggs]
         os.environ["PYTHONPATH"] = pathsep.join(PPATH)
         self.announce("Use PYTHONPATH=%s" % os.environ["PYTHONPATH"], level=3)
         return PYTHONPATH

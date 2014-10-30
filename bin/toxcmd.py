@@ -145,6 +145,7 @@ command_mkdir.usage = "%(prog)s dir..."
 command_mkdir.short = "Create non-existing directory (or more...)."
 command_mkdir.setup_parser = setup_parser_mkdir
 
+
 # -----------------------------------------------------------------------------
 # SUBCOMMAND: py2to3
 # -----------------------------------------------------------------------------
@@ -219,7 +220,6 @@ class Command(object):
 # -----------------------------------------------------------------------------
 def toxcmd_main(args=None):
     """Command util with subcommands for tox environments."""
-    usage = "USAGE: %(prog)s [OPTIONS] COMMAND args..."
     if args is None:
         args = sys.argv[1:]
 

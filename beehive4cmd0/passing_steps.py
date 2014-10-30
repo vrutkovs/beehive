@@ -16,6 +16,7 @@ EXAMPLES:
 
 from beehive import step, then
 
+
 # -----------------------------------------------------------------------------
 # STEPS FOR: passing
 # -----------------------------------------------------------------------------
@@ -26,10 +27,10 @@ def step_passes(context, word):
     """
     pass
 
+
 @then('it should pass because "{reason}"')
 def then_it_should_pass_because(context, reason):
     """
     Self documenting step that indicates some reason.
     """
     pass
-

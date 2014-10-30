@@ -47,6 +47,7 @@ def workdir_save_coverage_files(workdir, destdir=None):
 #     assert os.path.exists(dirname)
 #     assert os.path.isdir(dirname)
 
+
 def ensure_context_attribute_exists(context, name, default_value=None):
     """
     Ensure a beehive resource exists as attribute in the beehive context.
@@ -54,6 +55,7 @@ def ensure_context_attribute_exists(context, name, default_value=None):
     """
     if not hasattr(context, name):
         setattr(context, name, default_value)
+
 
 def ensure_workdir_exists(context):
     """

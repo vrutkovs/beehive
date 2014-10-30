@@ -3,7 +3,7 @@ import sys
 import tempfile
 import unittest
 from mock import Mock, patch
-from nose.tools import *
+from nose.tools import eq_
 
 from beehive.formatter import formatters
 from beehive.formatter import pretty
@@ -37,6 +37,7 @@ class TestGetTerminalSize(unittest.TestCase):
     def test_termios_fallback(self):
         try:
             import termios
+            assert termios
             return
         except ImportError:
             pass
@@ -98,10 +99,11 @@ class FormatterTests(unittest.TestCase):
     def setUp(self):
         self.config = Mock()
         self.config.color = True
-        self.config.outputs = [ StreamOpener(stream=sys.stdout) ]
+        self.config.outputs = [StreamOpener(stream=sys.stdout)]
         self.config.format = [self.formatter_name]
 
     _line = 0
+
     @property
     def line(self):
         self._line += 1
@@ -114,17 +116,17 @@ class FormatterTests(unittest.TestCase):
         return f
 
     def _feature(self, keyword=u'k\xe9yword', name=u'name', tags=[u'spam', u'ham'],
-            location=u'location', description=[u'description'], scenarios=[],
-            background=None):
+                 location=u'location', description=[u'description'], scenarios=[],
+                 background=None):
         line = self.line
-        tags = [Tag(name, line) for name in tags]
+        tags = [Tag(tag_name, line) for tag_name in tags]
         return Feature('<string>', line, keyword, name, tags=tags,
-            description=description, scenarios=scenarios,
-            background=background)
+                       description=description, scenarios=scenarios,
+                       background=background)
 
     def _scenario(self, keyword=u'k\xe9yword', name=u'name', tags=[], steps=[]):
         line = self.line
-        tags = [Tag(name, line) for name in tags]
+        tags = [Tag(tag_name, line) for tag_name in tags]
         return Scenario('<string>', line, keyword, name, tags=tags, steps=steps)
 
     def _step(self, keyword=u'k\xe9yword', step_type='given', name=u'name',
@@ -190,7 +192,7 @@ class TestTagsCount(FormatterTests):
         p.feature(f)
         p.scenario(s)
 
-        eq_(p.tag_counts, {'ham': [ f, s ], 'spam': [ f ], 'foo': [ s ]})
+        eq_(p.tag_counts, {'ham': [f, s], 'spam': [f], 'foo': [s]})
 
 
 class MultipleFormattersTests(FormatterTests):
@@ -199,8 +201,8 @@ class MultipleFormattersTests(FormatterTests):
     def setUp(self):
         self.config = Mock()
         self.config.color = True
-        self.config.outputs = [ StreamOpener(stream=sys.stdout)
-                                for i in self.formatters ]
+        self.config.outputs = [StreamOpener(stream=sys.stdout)
+                               for i in self.formatters]
         self.config.format = self.formatters
 
     def _formatters(self, file, config):
@@ -244,8 +246,10 @@ class MultipleFormattersTests(FormatterTests):
 class TestPrettyAndPlain(MultipleFormattersTests):
     formatters = ['pretty', 'plain']
 
+
 class TestPrettyAndJSON(MultipleFormattersTests):
     formatters = ['pretty', 'json']
+
 
 class TestJSONAndPlain(MultipleFormattersTests):
     formatters = ['json', 'plain']

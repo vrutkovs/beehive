@@ -97,7 +97,7 @@ def step_then_scenarios_are_selected_with_cmdline(context):
         # -- STEP: Run model with cmdline tags
         run_model_with_cmdline(model, cmdline)
         selected, skipped = collect_selected_and_skipped_scenarios(model)
-        actual_selected = [scenario.name  for scenario in selected]
+        actual_selected = [scenario.name for scenario in selected]
 
         # -- CHECK:
         assert_that(actual_selected, equal_to(expected_selected_names),

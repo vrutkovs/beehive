@@ -277,7 +277,7 @@ class Context(object):
         # -- PREPARE: Save original context data for current step.
         # Needed if step definition that called this method uses .table/.text
         original_table = getattr(self, "table", None)
-        original_text  = getattr(self, "text", None)
+        original_text = getattr(self, "text", None)
 
         self.feature.parser.variant = 'steps'
         steps = self.feature.parser.parse_steps(steps_text)
@@ -293,7 +293,7 @@ class Context(object):
 
         # -- FINALLY: Restore original context data for current step.
         self.table = original_table
-        self.text  = original_text
+        self.text = original_text
         return True
 
 
@@ -407,7 +407,7 @@ class ModelRunner(object):
                 with context.user_mode():
                     self.hooks[name](context, *args)
             except Exception, e:
-                # Abort execution for before_all/after_all 
+                # Abort execution for before_all/after_all
                 if 'all' in name:
                     self.aborted = True
                 if 'step' in name:
@@ -547,7 +547,6 @@ class Runner(ModelRunner):
         self.path_manager = PathManager()
         self.base_dir = None
 
-
     def setup_paths(self):
         if self.config.paths:
             if self.config.verbose:
@@ -645,7 +644,7 @@ class Runner(ModelRunner):
     def load_step_definitions(self, extra_step_paths=[]):
         step_globals = {
             'use_step_matcher': matchers.use_step_matcher,
-            'step_matcher':     matchers.step_matcher, # -- DEPRECATING
+            'step_matcher': matchers.step_matcher,  # -- DEPRECATING
         }
         setup_step_decorators(step_globals)
 
@@ -670,12 +669,10 @@ class Runner(ModelRunner):
     def feature_locations(self):
         return collect_feature_locations(self.config.paths)
 
-
     def run(self):
         with self.path_manager:
             self.setup_paths()
             return self.run_with_paths()
-
 
     def run_with_paths(self):
         self.context = Context(self)
@@ -687,8 +684,8 @@ class Runner(ModelRunner):
         # self.run_hook('before_all', self.context)
 
         # -- STEP: Parse all feature files (by using their file location).
-        feature_locations = [ filename for filename in self.feature_locations()
-                                    if not self.config.exclude(filename) ]
+        feature_locations = [filename for filename in self.feature_locations()
+                             if not self.config.exclude(filename)]
         features = parse_features(feature_locations, language=self.config.lang)
         self.features.extend(features)
 
@@ -696,7 +693,3 @@ class Runner(ModelRunner):
         stream_openers = self.config.outputs
         self.formatters = formatters.get_formatter(self.config, stream_openers)
         return self.run_model()
-
-
-
-
