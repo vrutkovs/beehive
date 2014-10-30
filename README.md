@@ -16,3 +16,4 @@ Changes and new features:
 
 Fixes:
  * [fix unicode error in textutil](https://github.com/behave/behave/pull/258)
+ * [IDE's unknown modules import issue](https://github.com/behave/behave/pull/219)
