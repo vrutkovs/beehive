@@ -1,6 +1,9 @@
 Beehive
 ===
 
+[![travis-ci.org](https://travis-ci.org/vrutkovs/beehive.svg?branch=master)](https://travis-ci.org/vrutkovs/beehive)
+[![codecov.io](https://codecov.io/github/vrutkovs/beehive/coverage.svg?branch=master)](https://codecov.io/github/vrutkovs/beehive?branch=master)
+
 Behave's clone. See https://github.com/behave/behave for original project
 
 Changes and new features:
