@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/vrutkovs/beehive.png?label=ready&title=Ready)](https://waffle.io/vrutkovs/beehive)
 Beehive
 ===
 
