@@ -5,16 +5,16 @@ python:
   - pypy
 
 install:
-  - pip install --use-mirrors -q mock nose PyHamcrest python-coveralls pyflakes pep8
+  - pip install --use-mirrors -q mock nose PyHamcrest codecov pyflakes pep8
   - python setup.py -q install
 script:
   - python --version
-  - nosetests --with-coverage
-  - COVERAGE_FILE=.coverage.features coverage run bin/beehive -f progress3 --junit --tags=~@xfail features/
-  - COVERAGE_FILE=.coverage.tools coverage run bin/beehive -f progress3 --junit --tags=~@xfail tools/test-features/
-  - COVERAGE_FILE=.coverage.issues coverage run bin/beehive -f progress3 --junit --tags=~@xfail issue.features/
+  - nosetests --with-coverage --cover-branches
+  - COVERAGE_FILE=.coverage.features coverage run --branch --pylib bin/beehive -f progress3 --junit --tags=~@xfail features/
+  - COVERAGE_FILE=.coverage.tools coverage run --branch --pylib bin/beehive -f progress3 --junit --tags=~@xfail tools/test-features/
+  - COVERAGE_FILE=.coverage.issues coverage run --branch --pylib bin/beehive -f progress3 --junit --tags=~@xfail issue.features/
   - pyflakes **/*.py
   - pep8 --ignore=E501,E265 --show-source --show-pep8 **/*.py
 after_success:
   - coverage combine
-  - coveralls
+  - codecov
