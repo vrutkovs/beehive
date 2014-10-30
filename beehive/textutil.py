@@ -32,6 +32,7 @@ def indent(text, prefix):
     else:
         return newline.join([prefix + line.decode('utf-8') for line in lines])
 
+
 def compute_words_maxsize(words):
     """
     Compute the maximum word size from a list of words (or strings).

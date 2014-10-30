@@ -1,8 +1,6 @@
 import unittest
 
-from nose import tools
-
-from behave import textutil
+from beehive import textutil
 
 
 class TestTextUtil(unittest.TestCase):
