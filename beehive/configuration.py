@@ -6,7 +6,7 @@ import sys
 import argparse
 import logging
 import shlex
-from six.moves import configparser
+from ConfigParser import SafeConfigParser
 
 from beehive.model import FileLocation, ScenarioOutline
 from beehive.reporter.junit import JUnitReporter
@@ -332,7 +332,7 @@ raw_value_options = frozenset([
 
 
 def read_configuration(path):
-    cfg = configparser.SafeConfigParser()
+    cfg = SafeConfigParser()
     cfg.read(path)
     cfgdir = os.path.dirname(path)
     result = {}

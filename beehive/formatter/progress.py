@@ -10,7 +10,6 @@ executing a scope item.
 """
 
 from beehive.formatter.base import Formatter
-from beehive.compat.os_path import relpath
 import os
 
 
@@ -51,7 +50,7 @@ class ProgressFormatterBase(Formatter):
     # -- FORMATTER API:
     def feature(self, feature):
         self.current_feature = feature
-        short_filename = relpath(feature.filename, os.getcwd())
+        short_filename = os.path.relpath(feature.filename, os.getcwd())
         self.stream.write("%s  " % short_filename)
         self.stream.flush()
 
@@ -199,7 +198,7 @@ class ScenarioStepProgressFormatter(StepProgressFormatter):
     # -- FORMATTER API:
     def feature(self, feature):
         self.current_feature = feature
-        short_filename = relpath(feature.filename, os.getcwd())
+        short_filename = os.path.relpath(feature.filename, os.getcwd())
         self.stream.write(u"%s    # %s" % (feature.name, short_filename))
 
     def scenario(self, scenario):

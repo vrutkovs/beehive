@@ -23,7 +23,6 @@ Normally, you put the RerunFormatter into the beehive configuration file:
 """
 
 from beehive.formatter.base import Formatter
-from beehive.compat.os_path import relpath
 from datetime import datetime
 import os
 
@@ -100,7 +99,7 @@ class RerunFormatter(Formatter):
                     if current_feature is not None:
                         self.stream.write(u"#\n")
                     current_feature = scenario.filename
-                    short_filename = relpath(scenario.filename, os.getcwd())
+                    short_filename = os.path.relpath(scenario.filename, os.getcwd())
                     self.stream.write(u"# %s\n" % short_filename)
                 self.stream.write(u"#  %4d:  %s\n" %
                                   (scenario.line, scenario.name))

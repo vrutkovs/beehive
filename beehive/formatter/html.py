@@ -29,10 +29,8 @@ TODO:
 
 from beehive.formatter.base import Formatter
 from beehive.compat.collections import Counter
-# XXX-JE-OLD: import lxml.etree as ET
 import xml.etree.ElementTree as ET
 import base64
-# XXX-JE-NOT-USED: import os.path
 
 
 def _valid_XML_char_ordinal(i):

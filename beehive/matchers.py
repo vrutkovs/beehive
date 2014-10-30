@@ -2,7 +2,6 @@ from __future__ import with_statement
 
 import re
 import parse
-from parse_type import cfparse
 from beehive import model
 
 
@@ -86,17 +85,6 @@ class ParseMatcher(Matcher):
         return args
 
 
-class CFParseMatcher(ParseMatcher):
-    """
-    Uses :class:`parse_type.cfparse.Parser` instead of "parse.Parser".
-    Provides support for automatic generation of type variants
-    for fields with CardinalityField part.
-    """
-    def __init__(self, func, string, step_type=None):
-        super(ParseMatcher, self).__init__(func, string, step_type)
-        self.parser = cfparse.Parser(self.string, self.custom_types)
-
-
 def register_type(**kw):
     """Registers a custom type that will be available to "parse"
     for type conversion during step matching.
@@ -153,7 +141,6 @@ class RegexMatcher(Matcher):
 
 matcher_mapping = {
     "parse": ParseMatcher,
-    "cfparse": CFParseMatcher,
     "re": RegexMatcher,
 }
 current_matcher = ParseMatcher

@@ -9,7 +9,6 @@ import sys
 import time
 import traceback
 from beehive import step_registry
-from beehive.compat.os_path import relpath
 
 
 class Argument(object):
@@ -101,7 +100,7 @@ class FileLocation(object):
         :param start: Base path or start directory (default=current dir).
         :return: Relative path from start to filename
         """
-        return relpath(self.filename, start)
+        return os.path.relpath(self.filename, start)
 
     def exists(self):
         return os.path.exists(self.filename)
@@ -161,7 +160,7 @@ class FileLocation(object):
 class BasicStatement(object):
     def __init__(self, filename, line, keyword, name):
         filename = filename or '<string>'
-        filename = relpath(filename, os.getcwd())   # -- NEEDS: abspath?
+        filename = os.path.relpath(filename, os.getcwd())   # -- NEEDS: abspath?
         self.location = FileLocation(filename, line)
         assert isinstance(keyword, unicode)
         assert isinstance(name, unicode)
@@ -1794,7 +1793,7 @@ class Match(Replayable):
         :param step_function: Function whose location should be determined.
         :return: Step function location as string.
         '''
-        filename = relpath(step_function.func_code.co_filename, os.getcwd())
+        filename = os.path.relpath(step_function.func_code.co_filename, os.getcwd())
         line_number = step_function.func_code.co_firstlineno
         return FileLocation(filename, line_number)
 

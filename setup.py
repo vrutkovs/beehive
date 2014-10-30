@@ -23,11 +23,10 @@ from setuptools_beehive import beehive_test
 # CONFIGURATION:
 # -----------------------------------------------------------------------------
 python_version = float("%s.%s" % sys.version_info[:2])
-requirements = ["parse>=1.6.3", "parse_type>=0.3.4", "six"]
+requirements = ["parse>=1.6.3"]
 if python_version < 2.7 or 3.0 <= python_version <= 3.1:
     requirements.append("argparse")
 if python_version < 2.7:
-    requirements.append("importlib")
     requirements.append("ordereddict")
 if python_version < 2.6:
     requirements.append("simplejson")

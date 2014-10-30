@@ -4,19 +4,17 @@ Compatibility of :module:`collections` between different Python versions.
 """
 
 from __future__ import absolute_import
-import warnings
-from operator import itemgetter
-from heapq import nlargest
-from itertools import repeat, ifilter
 
 try:
     # -- SINCE: Python2.7
     from collections import OrderedDict
-except ImportError:     # pragma: no cover
+except ImportError:
     try:
         # -- BACK-PORTED FOR: Python 2.4 .. 2.6
         from ordereddict import OrderedDict
     except ImportError:
+        import warnings
+
         message = "collections.OrderedDict is missing: Install 'ordereddict'."
         warnings.warn(message)
         # -- BACKWARD-COMPATIBLE: Better than nothing (for beehive use case).
@@ -25,7 +23,11 @@ except ImportError:     # pragma: no cover
 try:
     # -- SINCE: Python2.7
     from collections import Counter
-except ImportError:     # pragma: no cover
+except ImportError:
+    from operator import itemgetter
+    from heapq import nlargest
+    from itertools import repeat, ifilter
+
     class Counter(dict):
         '''Dict subclass for counting hashable objects.  Sometimes called a bag
         or multiset.  Elements are stored as dictionary keys and their counts

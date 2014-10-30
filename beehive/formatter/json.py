@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 from beehive.formatter.base import Formatter
 import base64
-import six
 try:
     import json
 except ImportError:
@@ -20,7 +19,7 @@ class JSONFormatter(Formatter):
     split_text_into_lines = True   # EXPERIMENT for better readability.
 
     json_number_types = (int, long, float)
-    json_scalar_types = json_number_types + (six.text_type, bool, type(None))
+    json_scalar_types = json_number_types + (unicode, bool, type(None))
 
     def __init__(self, stream_opener, config):
         super(JSONFormatter, self).__init__(stream_opener, config)

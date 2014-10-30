@@ -14,7 +14,6 @@ TODO:
 
 from beehive.formatter.steps import AbstractStepsFormatter
 from beehive.formatter import sphinx_util
-from beehive.compat.os_path import relpath
 from beehive.model import Table
 import inspect
 import os.path
@@ -55,7 +54,7 @@ class StepsModule(object):
         if not self._filename:
             if self.step_definitions:
                 filename = inspect.getfile(self.step_definitions[0].func)
-                self._filename = relpath(filename)
+                self._filename = os.path.relpath(filename)
         return self._filename
 
     @property
