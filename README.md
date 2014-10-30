@@ -13,6 +13,7 @@ Changes and new features:
  * Code coverage on codecov.io
  * [HTML Formatter](https://github.com/behave/behave/pull/86)
  * [Step definitions in subfolders](https://github.com/behave/behave/pull/170)
+ * [Add a way to add command line options to behave ](https://github.com/behave/behave/pull/243)
 
 Fixes:
  * [fix unicode error in textutil](https://github.com/behave/behave/pull/258)
