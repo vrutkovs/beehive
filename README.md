@@ -3,6 +3,7 @@ Beehive
 
 [![travis-ci.org](https://travis-ci.org/vrutkovs/beehive.svg?branch=master)](https://travis-ci.org/vrutkovs/beehive)
 [![codecov.io](https://codecov.io/github/vrutkovs/beehive/coverage.svg?branch=master)](https://codecov.io/github/vrutkovs/beehive?branch=master)
+[![Codacy Badge](https://www.codacy.com/project/badge/c51fc5e41c4d40ecb09caa2fe6e0020f)](https://www.codacy.com)
 
 [Behave](https://github.com/behave/behave) fork
 
