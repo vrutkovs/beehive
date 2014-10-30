@@ -564,7 +564,7 @@ class Configuration(object):
 
         if self.stage is None:
             # -- USE ENVIRONMENT-VARIABLE, if stage is undefined.
-            self.stage = os.environ.get("BEHAVE_STAGE", None)
+            self.stage = os.environ.get("BEEHIVE_STAGE", None)
         self.setup_stage(self.stage)
 
         self.userdata = UserData(self.userdata)

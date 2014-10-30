@@ -33,45 +33,17 @@ class TestConfiguration(object):
             f.write(TEST_CONFIG)
 
         d = configuration.read_configuration(tn)
-        eq_(d['outfiles'], [
-            os.path.normpath('/absolute/path1'),
-            os.path.normpath(os.path.join(tndir, 'relative/path2')),
-        ])
-        eq_(d['paths'], [
-            os.path.normpath('/absolute/path3'),  # -- WINDOWS-REQUIRES: normpath
-            os.path.normpath(os.path.join(tndir, 'relative/path4'))
-        ])
+        eq_(d['outfiles'],
+            [os.path.normpath('/absolute/path1'),
+             os.path.normpath(os.path.join(tndir, 'relative/path2'))])
+        eq_(d['paths'],
+            [os.path.normpath('/absolute/path3'),  # -- WINDOWS-REQUIRES: normpath
+             os.path.normpath(os.path.join(tndir, 'relative/path4'))])
         eq_(d['format'], ['pretty', 'tag-counter'])
         eq_(d['tags'], ['@foo,~@bar', '@zap'])
         eq_(d['stdout_capture'], False)
         ok_('bogus' not in d)
         eq_(d['userdata'], [('foo', 'bar')])
-
-    def test_settings_without_stage(self):
-        # -- OR: Setup with default, unnamed stage.
-        assert "BEHAVE_STAGE" not in os.environ
-        config = configuration.Configuration()
-        eq_("steps", config.steps_dir)
-        eq_("environment.py", config.environment_file)
-
-    def test_settings_with_stage(self):
-        config = configuration.Configuration(["--stage=STAGE1"])
-        eq_("STAGE1_steps", config.steps_dir)
-        eq_("STAGE1_environment.py", config.environment_file)
-
-    def test_settings_with_stage_and_envvar(self):
-        os.environ["BEHAVE_STAGE"] = "STAGE2"
-        config = configuration.Configuration(["--stage=STAGE1"])
-        eq_("STAGE1_steps", config.steps_dir)
-        eq_("STAGE1_environment.py", config.environment_file)
-        del os.environ["BEHAVE_STAGE"]
-
-    def test_settings_with_stage_from_envvar(self):
-        os.environ["BEHAVE_STAGE"] = "STAGE2"
-        config = configuration.Configuration()
-        eq_("STAGE2_steps", config.steps_dir)
-        eq_("STAGE2_environment.py", config.environment_file)
-        del os.environ["BEHAVE_STAGE"]
 
     def test_userdata_is_appended(self):
         config = configuration.Configuration([
