@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import
 from beehive.formatter.base import Formatter
+from beehive.compat import unicode, long
 import base64
 try:
     import json

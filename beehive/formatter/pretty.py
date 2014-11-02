@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 
+from beehive.compat import unicode
 from beehive.formatter.ansi_escapes import escapes, up
 from beehive.formatter.base import Formatter
 from beehive.model_describe import escape_cell, escape_triple_quotes

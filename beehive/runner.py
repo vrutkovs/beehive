@@ -3,19 +3,31 @@
 from __future__ import with_statement
 import contextlib
 import os.path
-import StringIO
 import sys
+from io import BytesIO, StringIO
 import traceback
 import warnings
 import weakref
 
 from beehive import matchers
+from beehive.compat import unicode
 from beehive.step_registry import setup_step_decorators
 from beehive.formatter import formatters
 from beehive.configuration import ConfigError
 from beehive.log_capture import LoggingCapture
 from beehive.runner_util import \
     collect_feature_locations, parse_features
+
+
+class MyBytesIO(BytesIO):
+
+    def write(self, bytes_to_write, encoding='UTF-8'):
+        if not isinstance(bytes_to_write, bytes):
+            if sys.version_info[0] == 2:
+                bytes_to_write = str(bytes_to_write)
+            else:
+                bytes_to_write = bytes(bytes_to_write, encoding)
+        super(MyBytesIO, self).write(bytes_to_write)
 
 
 class ContextMaskWarning(UserWarning):
@@ -200,8 +212,8 @@ class Context(object):
 
     def _dump(self):
         for level, frame in enumerate(self._stack):
-            print 'Level %d' % level
-            print repr(frame)
+            print('Level %d' % level)
+            print(repr(frame))
 
     def __getattr__(self, attr):
         if attr[0] == '_':
@@ -301,14 +313,11 @@ def exec_file(filename, globals={}, locals=None):
     if locals is None:
         locals = globals
     locals['__file__'] = filename
-    if sys.version_info[0] == 3:
-        with open(filename) as f:
-            # -- FIX issue #80: exec(f.read(), globals, locals)
-            filename2 = os.path.relpath(filename, os.getcwd())
-            code = compile(f.read(), filename2, 'exec')
-            exec(code, globals, locals)
-    else:
-        execfile(filename, globals, locals)
+    with open(filename) as f:
+        # -- FIX issue #80: exec(f.read(), globals, locals)
+        filename2 = os.path.relpath(filename, os.getcwd())
+        code = compile(f.read(), filename2, 'exec')
+        exec(code, globals, locals)
 
 
 def path_getrootdir(path):
@@ -406,7 +415,7 @@ class ModelRunner(object):
             try:
                 with context.user_mode():
                     self.hooks[name](context, *args)
-            except Exception, e:
+            except Exception as e:
                 # Abort execution for before_all/after_all
                 if 'all' in name:
                     self.aborted = True
@@ -421,18 +430,24 @@ class ModelRunner(object):
                     args[0].scenarios[-1].compute_status()
                     args[0].compute_status()
                     args[0]._cached_status = 'failed'
-                print("Exception in %s hook: %s" % (name, e.message))
+                print("Exception in %s hook: %s" % (name, str(e)))
 
     def setup_capture(self):
         if not self.context:
             self.context = Context(self)
 
         if self.config.stdout_capture:
-            self.stdout_capture = StringIO.StringIO()
+            if sys.version_info[0] == '2':
+                self.stdout_capture = StringIO()
+            else:
+                self.stdout_capture = MyBytesIO()
             self.context.stdout_capture = self.stdout_capture
 
         if self.config.stderr_capture:
-            self.stderr_capture = StringIO.StringIO()
+            if sys.version_info[0] == '2':
+                self.stderr_capture = StringIO()
+            else:
+                self.stderr_capture = MyBytesIO()
             self.context.stderr_capture = self.stderr_capture
 
         if self.config.log_capture:
@@ -513,7 +528,7 @@ class ModelRunner(object):
 
         # -- AFTER-ALL:
         if self.aborted:
-            print "\nABORTED: By user."
+            print("\nABORTED: By user.")
         for formatter in self.formatters:
             formatter.close()
         self.run_hook('after_all', self.context)
@@ -550,8 +565,8 @@ class Runner(ModelRunner):
     def setup_paths(self):
         if self.config.paths:
             if self.config.verbose:
-                print 'Supplied path:', \
-                      ', '.join('"%s"' % path for path in self.config.paths)
+                print('Supplied path:' +
+                      ', '.join('"%s"' % path for path in self.config.paths))
             first_path = self.config.paths[0]
             if hasattr(first_path, "filename"):
                 # -- BETTER: isinstance(first_path, FileLocation):
@@ -568,11 +583,11 @@ class Runner(ModelRunner):
             # supplied path might be to a feature file
             if os.path.isfile(base_dir):
                 if self.config.verbose:
-                    print 'Primary path is to a file so using its directory'
+                    print('Primary path is to a file so using its directory')
                 base_dir = os.path.dirname(base_dir)
         else:
             if self.config.verbose:
-                print 'Using default path "./features"'
+                print('Using default path "./features"')
             base_dir = os.path.abspath('features')
 
         # Get the root. This is not guaranteed to be '/' because Windows.
@@ -581,7 +596,7 @@ class Runner(ModelRunner):
 
         while True:
             if self.config.verbose:
-                print 'Trying base directory:', new_base_dir
+                print('Trying base directory:', new_base_dir)
 
             if os.path.isdir(os.path.join(new_base_dir, 'steps')):
                 break
@@ -595,11 +610,11 @@ class Runner(ModelRunner):
         if new_base_dir == root_dir:
             if self.config.verbose:
                 if not self.config.paths:
-                    print 'ERROR: Could not find "steps" directory. Please '\
-                        'specify where to find your features.'
+                    print('ERROR: Could not find "steps" directory. Please ' +
+                          'specify where to find your features.')
                 else:
-                    print 'ERROR: Could not find "steps" directory in your '\
-                        'specified path "%s"' % base_dir
+                    print('ERROR: Could not find "steps" directory in your ' +
+                          'specified path "%s"' % base_dir)
             raise ConfigError('No steps directory in "%s"' % base_dir)
 
         base_dir = new_base_dir
@@ -611,11 +626,11 @@ class Runner(ModelRunner):
         else:
             if self.config.verbose:
                 if not self.config.paths:
-                    print 'ERROR: Could not find any "<name>.feature" files. '\
-                        'Please specify where to find your features.'
+                    print('ERROR: Could not find any "<name>.feature" files. ' +
+                          'Please specify where to find your features.')
                 else:
-                    print 'ERROR: Could not find any "<name>.feature" files '\
-                        'in your specified path "%s"' % base_dir
+                    print('ERROR: Could not find any "<name>.feature" files ' +
+                          'in your specified path "%s"' % base_dir)
             raise ConfigError('No feature files in "%s"' % base_dir)
 
         self.base_dir = base_dir

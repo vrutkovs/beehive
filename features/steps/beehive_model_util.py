@@ -80,7 +80,7 @@ class BehaveModelBuilder(object):
 def run_model_with_cmdline(model, cmdline):
     reset_model(model.features)
     command_args = cmdline
-    config = Configuration(command_args,
+    config = Configuration(command_args=command_args,
                            load_config=False,
                            default_format="null",
                            stdout_capture=False,

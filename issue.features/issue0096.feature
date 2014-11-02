@@ -38,12 +38,12 @@ Feature: Issue #96: Sub-steps failed without any error info to help debug issue
 
         @step(u'a step fails with stdout "{message}"')
         def step_fails_with_stdout(context, message):
-            sys.stdout.write("%s\n" % message)
+            sys.stdout.write("%s\n" % str(message))
             assert False, 'EXPECT: Step fails with stdout.'
 
         @step(u'a step fails with stderr "{message}"')
         def step_fails_with_stderr(context, message):
-            sys.stderr.write("%s\n" % message)
+            sys.stderr.write("%s\n" % str(message))
             assert False, 'EXPECT: Step fails with stderr.'
 
         @step(u'a step raises an error "{message}"')

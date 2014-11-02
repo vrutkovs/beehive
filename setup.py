@@ -95,5 +95,4 @@ setup(
         "Topic :: Software Development :: Testing",
         "License :: OSI Approved :: BSD License",
     ],
-    zip_safe=True,
 )

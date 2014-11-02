@@ -28,6 +28,7 @@ TODO:
 """
 
 from beehive.formatter.base import Formatter
+from beehive.compat import unicode
 from beehive.compat.collections import Counter
 import xml.etree.ElementTree as ET
 import base64

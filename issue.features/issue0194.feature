@@ -43,7 +43,7 @@ Feature: Issue #194: Nested steps prevent that original stdout/stderr is restore
         def write_text_to(stream, text, enforce_newline=True):
             if enforce_newline and not text.endswith("\n"):
                 text += "\n"
-            stream.write(text)
+            stream.write(str(text))
 
         # -- STEP DEFINITIONS:
         @step('I write "{text}" to {stream_name:StreamName}')

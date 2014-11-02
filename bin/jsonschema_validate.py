@@ -91,7 +91,7 @@ def main(args=None):
         contents = f.read()
         f.close()
         schema = json.loads(contents, encoding=options.encoding)
-    except Exception, e:
+    except Exception as e:
         msg = "ERROR: %s: %s (while loading schema)" % (e.__class__.__name__, e)
         sys.exit(msg)
 
@@ -100,16 +100,16 @@ def main(args=None):
         validated = True
         more_info = None
         try:
-            print "validate:", filename, "...",
+            print("validate:", filename, "...",)
             jsonschema_validate(filename, schema, encoding=options.encoding)
-        except Exception, e:
+        except Exception as e:
             more_info = "%s: %s" % (e.__class__.__name__, e)
             validated = False
             error_count += 1
         if validated:
-            print "OK"
+            print("OK")
         else:
-            print "FAILED\n\n%s" % more_info
+            print("FAILED\n\n%s" % more_info)
     return error_count
 
 

@@ -6,8 +6,12 @@ import sys
 import argparse
 import logging
 import shlex
-from ConfigParser import SafeConfigParser
+try:
+    from configparser import ConfigParser as SafeConfigParser
+except ImportError:
+    from ConfigParser import SafeConfigParser
 
+from beehive.compat import unicode, basestring
 from beehive.model import FileLocation, ScenarioOutline
 from beehive.reporter.junit import JUnitReporter
 from beehive.reporter.summary import SummaryReporter
@@ -353,12 +357,12 @@ def read_configuration(path):
         action = keywords.get('action', 'store')
         if action == 'store':
             use_raw_value = dest in raw_value_options
-            result[dest] = cfg.get('beehive', dest, use_raw_value)
+            result[dest] = cfg.get(section='beehive', option=dest, raw=use_raw_value)
         elif action in ('store_true', 'store_false'):
             result[dest] = cfg.getboolean('beehive', dest)
         elif action == 'append':
             result[dest] = \
-                [s.strip() for s in cfg.get('beehive', dest).splitlines()]
+                [s.strip() for s in cfg.get(section='beehive', option=dest).splitlines()]
         else:
             raise ValueError('action "%s" not implemented' % action)
 
@@ -374,7 +378,7 @@ def read_configuration(path):
                 outfiles.append(outfile)
             result['outfiles'] = outfiles
         elif len(outfiles) > formatter_size:
-            print "CONFIG-ERROR: Too many outfiles (%d) provided." % outfiles_size
+            print("CONFIG-ERROR: Too many outfiles (%d) provided." % outfiles_size)
             result['outfiles'] = outfiles[:formatter_size]
 
     for paths_name in ('paths', 'outfiles'):
@@ -398,13 +402,13 @@ def load_configuration(defaults, verbose=False):
             filename = os.path.join(path, filename)
             if os.path.isfile(filename):
                 if verbose:
-                    print 'Loading config defaults from "%s"' % filename
+                    print('Loading config defaults from "%s"' % filename)
                 defaults.update(read_configuration(filename))
 
     if verbose:
-        print 'Using defaults:'
+        print('Using defaults:')
         for k, v in defaults.items():
-            print '%15s %s' % (k, v)
+            print('%15s %s' % (k, v))
 
 
 # construct the parser
@@ -469,10 +473,11 @@ class Configuration(object):
         """
         if command_args is None:
             command_args = sys.argv[1:]
-        elif isinstance(command_args, basestring):
-            if isinstance(command_args, unicode):
-                command_args = command_args.encode("utf-8")
+        elif isinstance(command_args, basestring) and sys.version_info[0] == 2:
+            command_args = command_args.encode("utf-8")
             command_args = shlex.split(command_args)
+        elif isinstance(command_args, str) and sys.version_info[0] == 3:
+            command_args = command_args.split(' ')
         if verbose is None:
             # -- AUTO-DISCOVER: Verbose mode from command-line args.
             verbose = ('-v' in command_args) or ('--verbose' in command_args)

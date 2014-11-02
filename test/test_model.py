@@ -7,7 +7,6 @@ from beehive.compat.collections import OrderedDict
 from beehive import step_registry
 from mock import Mock, patch
 from nose.tools import raises, eq_
-import sys
 import unittest
 
 
@@ -146,11 +145,6 @@ class TestScenarioRun(unittest.TestCase):
 
         self.formatters[0].scenario.assert_called_with(scenario)
         [step.run.assert_called_with(self.runner) for step in steps]
-
-    if sys.version_info[0] == 3:
-        stringio_target = 'io.StringIO'
-    else:
-        stringio_target = 'StringIO.StringIO'
 
     def test_handles_stdout_and_log_capture(self):
         self.config.stdout_capture = True
@@ -385,7 +379,7 @@ class TestStepRun(unittest.TestCase):
         self.config = self.runner.config = Mock()
         self.config.outputs = [None]
         self.context = self.runner.context = Mock()
-        print ('context is', self.context)
+        print('context is', self.context)
         self.formatters = self.runner.formatters = [Mock()]
         self.step_registry = Mock()
         self.stdout_capture = self.runner.stdout_capture = Mock()
@@ -642,7 +636,7 @@ class TestTableModel(unittest.TestCase):
         self.table[0]['spam']
 
     def test_table_row_items(self):
-        eq_(self.table[0].items(), zip(self.HEAD, self.DATA[0]))
+        eq_(self.table[0].as_dict(), OrderedDict(zip(self.HEAD, self.DATA[0])))
 
 
 class TestModelRow(unittest.TestCase):

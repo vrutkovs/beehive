@@ -50,7 +50,7 @@ Feature: Scenario Description
 
         @step('a step passes with "{comment}"')
         def step_passes(context, comment):
-            sys.stdout.write("PASSING-STEP: %s;\n" % comment)
+            sys.stdout.write("PASSING-STEP: %s;\n" % str(comment))
 
         @step('a step fails')
         def step_fails(context):

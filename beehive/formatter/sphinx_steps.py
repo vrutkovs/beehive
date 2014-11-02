@@ -135,7 +135,7 @@ class SphinxStepsDocumentGenerator(object):
     def ensure_destdir_exists(self):
         assert self.destdir
         if os.path.isfile(self.destdir):
-            print "OOPS: remove %s" % self.destdir
+            print("OOPS: remove %s" % self.destdir)
             os.remove(self.destdir)
         if not os.path.exists(self.destdir):
             os.makedirs(self.destdir)
@@ -160,11 +160,9 @@ class SphinxStepsDocumentGenerator(object):
                 step_modules_map[step_filename] = step_module
             step_module.append(step_definition)
 
-        compare_name = lambda x, y: cmp(x.name, y.name)
-        compare_location = lambda x, y: cmp(x.location, y.location)
-        step_modules = sorted(step_modules_map.values(), compare_name)
+        step_modules = sorted(step_modules_map.values(), key=lambda x: x.name)
         for module in step_modules:
-            step_definitions = sorted(module.step_definitions, compare_location)
+            step_definitions = sorted(module.step_definitions, key=lambda x: x.location)
             module.step_definitions = step_definitions
         return step_modules
 

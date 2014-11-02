@@ -3,8 +3,8 @@
 from __future__ import with_statement
 from collections import defaultdict
 import os.path
-import StringIO
 import sys
+from io import BytesIO
 import warnings
 import tempfile
 
@@ -120,7 +120,7 @@ class TestContext(unittest.TestCase):
 
         warnings.showwarning = old_showwarning
 
-        print repr(warns)
+        print(repr(warns))
         assert warns, 'warns is empty!'
         warning = warns[0]
         assert isinstance(warning, runner.ContextMaskWarning), 'warning is not a ContextMaskWarning'
@@ -165,7 +165,7 @@ class TestContext(unittest.TestCase):
 
         warnings.showwarning = old_showwarning
 
-        print repr(warns)
+        print(repr(warns))
         assert warns, 'warns is empty!'
         warning = warns[0]
         assert isinstance(warning, runner.ContextMaskWarning), 'warning is not a ContextMaskWarning'
@@ -191,7 +191,7 @@ class TestContext(unittest.TestCase):
 
         warnings.showwarning = old_showwarning
 
-        print repr(warns)
+        print(repr(warns))
         assert warns
         warning = warns[0]
         assert isinstance(warning, runner.ContextMaskWarning)
@@ -296,7 +296,7 @@ Then a step passes
         with patch('beehive.step_registry.registry', self.step_registry):
             try:
                 self.context.execute_steps(doc)
-            except AssertionError, e:  # -- PY26-CLEANUP-MARK
+            except AssertionError as e:  # -- PY26-CLEANUP-MARK
                 ok_("FAILED SUB-STEP: When a step fails" in str(e))
 
     def test_execute_steps_with_undefined_step(self):
@@ -308,7 +308,7 @@ Then a step passes
         with patch('beehive.step_registry.registry', self.step_registry):
             try:
                 self.context.execute_steps(doc)
-            except AssertionError, e:  # -- PY26-CLEANUP-MARK
+            except AssertionError as e:  # -- PY26-CLEANUP-MARK
                 ok_("UNDEFINED SUB-STEP: When a step is undefined" in str(e))
 
     def test_execute_steps_with_text(self):
@@ -441,7 +441,7 @@ class TestRunner(object):
 
         assert len(hook.call_args_list) == 0
 
-    def test_setup_capture_creates_stringio_for_stdout(self):
+    def test_setup_capture_creates_bytesio_for_stdout(self):
         r = runner.Runner(Mock())
         r.config.stdout_capture = True
         r.config.log_capture = False
@@ -450,9 +450,9 @@ class TestRunner(object):
         r.setup_capture()
 
         assert r.stdout_capture is not None
-        assert isinstance(r.stdout_capture, StringIO.StringIO)
+        assert isinstance(r.stdout_capture, BytesIO)
 
-    def test_setup_capture_does_not_create_stringio_if_not_wanted(self):
+    def test_setup_capture_does_not_create_bytesio_if_not_wanted(self):
         r = runner.Runner(Mock())
         r.config.stdout_capture = False
         r.config.stderr_capture = False
@@ -650,7 +650,7 @@ class FsMock(object):
             return bits
 
         paths = [os.path.join(self.base, *full_split(path)) for path in paths]
-        print repr(paths)
+        print(repr(paths))
         self.paths = paths
         self.files = set()
         self.dirs = defaultdict(list)

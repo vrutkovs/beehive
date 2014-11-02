@@ -19,11 +19,11 @@ Feature: Capture stdout output and show it in case of failures/errors
 
             @step('a step writes "{text}" to stdout and passes')
             def step_writes_to_stdout_and_passes(context, text):
-                sys.stdout.write("stdout:%s;\n" % text)
+                sys.stdout.write("stdout:%s;\n" % str(text))
 
             @step('a step writes "{text}" to stdout and fails')
             def step_writes_to_stdout_and_fails(context, text):
-                sys.stdout.write("stdout:%s;\n" % text)
+                sys.stdout.write("stdout:%s;\n" % str(text))
                 assert False, "XFAIL, step with: %s;" % text
             """
         And a file named "features/capture_stdout.example1.feature" with:

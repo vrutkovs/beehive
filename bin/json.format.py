@@ -91,7 +91,7 @@ def json_formatall(filenames, indent=DEFAULT_INDENT_SIZE, dry_run=False):
 #        except json.decoder.JSONDecodeError, e:
 #            console.error("ERROR: %s (filename: %s)", e, filename)
 #            errors += 1
-        except StandardError, e:
+        except Exception as e:
             console.error("ERROR %s: %s (filename: %s)",
                           e.__class__.__name__, e, filename)
             errors += 1

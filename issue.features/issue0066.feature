@@ -13,9 +13,15 @@ Feature: Issue #66: context.text and context.table are not cleared
 
       @given(u'a step with multiline text')
       def step(context):
+          import sys
           assert context.text is not None
           assert context.text, "Ensure non-empty"
-          assert isinstance(context.text, basestring)
+          string_type = None
+          if sys.version_info[0] == 3:
+              string_type = str
+          else:
+              string_type = unicode
+          assert isinstance(context.text, string_type)
 
       @given(u'a step with a table')
       def step(context):

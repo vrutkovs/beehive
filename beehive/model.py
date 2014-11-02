@@ -8,6 +8,7 @@ import os.path
 import sys
 import time
 import traceback
+from beehive.compat import unicode, basestring
 from beehive import step_registry
 
 
@@ -125,6 +126,11 @@ class FileLocation(object):
                 return False
             else:
                 assert self.filename == other.filename
+                # In py3 None cannot be compared and is less than any number
+                if self.line is None:
+                    self.line = -float('inf')
+                if other.line is None:
+                    other.line = -float('inf')
                 return self.line < other.line
         elif isinstance(other, basestring):
             return self.filename < other
@@ -154,7 +160,7 @@ class FileLocation(object):
     def __str__(self):
         if self.line is None:
             return self.filename
-        return u"%s:%d" % (self.filename, self.line)
+        return u"%s:%s" % (self.filename, self.line)
 
 
 class BasicStatement(object):
@@ -183,6 +189,9 @@ class BasicStatement(object):
 
     def __cmp__(self, other):
         # -- NOTE: Ignore potential FileLocation differences.
+        if sys.version_info[0] == '3':
+            def cmp(a, b):
+                return (a > b) - (a < b)
         return cmp((self.keyword, self.name), (other.keyword, other.name))
 
 
@@ -1341,12 +1350,12 @@ class Step(BasicStatement, Replayable):
                 runner.context.table = self.table
                 match.run(runner.context)
                 self.status = 'passed'
-            except KeyboardInterrupt, e:
+            except KeyboardInterrupt as e:
                 runner.aborted = True
                 error = u"ABORTED: By user (KeyboardInterrupt)."
                 self.status = 'failed'
                 self.store_exception_context(e)
-            except AssertionError, e:
+            except AssertionError as e:
                 self.status = 'failed'
                 self.store_exception_context(e)
                 if e.args:
@@ -1354,11 +1363,9 @@ class Step(BasicStatement, Replayable):
                 else:
                     # no assertion text; format the exception
                     error = traceback.format_exc()
-            except Exception, e:
+            except Exception as e:
                 self.status = 'failed'
                 error = traceback.format_exc()
-                if isinstance(error, str):
-                    error = error.decode('utf-8')
                 self.store_exception_context(e)
 
             self.duration = time.time() - start
@@ -1373,16 +1380,22 @@ class Step(BasicStatement, Replayable):
                 # -- CAPTURE-ONLY: Non-nested step failures.
                 if runner.config.stdout_capture:
                     output = runner.stdout_capture.getvalue()
+                    if hasattr(output, 'decode'):
+                        output = output.decode('utf-8')
                     if output:
-                        error += '\nCaptured stdout:\n' + output
+                        error += u'\nCaptured stdout:\n%s' % output
                 if runner.config.stderr_capture:
                     output = runner.stderr_capture.getvalue()
+                    if hasattr(output, 'decode'):
+                        output = output.decode('utf-8')
                     if output:
-                        error += '\nCaptured stderr:\n' + output
+                        error += u'\nCaptured stderr:\n%s' % output
                 if runner.config.log_capture:
                     output = runner.log_capture.getvalue()
+                    if hasattr(output, 'decode'):
+                        output = output.decode('utf-8')
                     if output:
-                        error += '\nCaptured logging:\n' + output
+                        error += u'\nCaptured logging:\n%s' % output
             self.error_message = error
             keep_going = False
 
@@ -1793,8 +1806,8 @@ class Match(Replayable):
         :param step_function: Function whose location should be determined.
         :return: Step function location as string.
         '''
-        filename = os.path.relpath(step_function.func_code.co_filename, os.getcwd())
-        line_number = step_function.func_code.co_firstlineno
+        filename = os.path.relpath(step_function.__code__.co_filename, os.getcwd())
+        line_number = step_function.__code__.co_firstlineno
         return FileLocation(filename, line_number)
 
 

@@ -13,6 +13,7 @@ and running features, etc.
 """
 
 from __future__ import print_function, with_statement
+from beehive.compat import unicode, basestring
 from beehive4cmd0.__setup import TOP
 import os.path
 import subprocess
@@ -85,7 +86,7 @@ class Command(object):
         command_result.command = command
 
         # -- BUILD COMMAND ARGS:
-        if isinstance(command, unicode):
+        if isinstance(command, unicode) and sys.version_info[0] == 2:
             command = codecs.encode(command)
         cmdargs = shlex.split(command)
 
@@ -121,7 +122,7 @@ class Command(object):
                 print("shell.cwd={0}".format(kwargs.get("cwd", None)))
                 print("shell.command: {0}".format(" ".join(cmdargs)))
                 print("shell.command.output:\n{0};".format(command_result.output))
-        except OSError, e:
+        except OSError as e:
             command_result.stderr = u"OSError: %s" % e
             command_result.returncode = e.errno
             assert e.errno != 0

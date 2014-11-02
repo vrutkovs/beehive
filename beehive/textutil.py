@@ -2,6 +2,7 @@
 """
 Provides some utility functions related to text processing.
 """
+from beehive.compat import unicode, basestring
 
 
 def make_indentation(indent_size, part=u" "):

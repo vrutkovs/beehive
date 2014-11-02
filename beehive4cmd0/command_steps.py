@@ -175,9 +175,6 @@ def step_command_output_should_contain_text(context, text):
             __CWD__=posixpath_normpath(os.getcwd())
         )
     actual_output = context.command_result.output
-    if DEBUG:
-        print(u"expected:\n{0}".format(expected_text))
-        print(u"actual:\n{0}".format(actual_output))
     textutil.assert_normtext_should_contain(actual_output, expected_text)
 
 
@@ -196,9 +193,6 @@ def step_command_output_should_not_contain_text(context, text):
             __CWD__=posixpath_normpath(os.getcwd())
         )
     actual_output = context.command_result.output
-    if DEBUG:
-        print(u"expected:\n{0}".format(expected_text))
-        print(u"actual:\n{0}".format(actual_output))
     textutil.assert_normtext_should_not_contain(actual_output, expected_text)
 
 
@@ -407,9 +401,6 @@ def step_file_should_contain_text(context, filename, text):
         )
     file_contents = pathutil.read_file_contents(filename, context=context)
     file_contents = file_contents.rstrip()
-    if DEBUG:
-        print(u"expected:\n{0}".format(expected_text))
-        print(u"actual:\n{0}".format(file_contents))
     textutil.assert_normtext_should_contain(file_contents, expected_text)
 
 

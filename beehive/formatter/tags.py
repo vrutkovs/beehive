@@ -7,6 +7,7 @@ EXAMPLE:
     $ beehive --dry-run -f tag_counts features/
 """
 
+from beehive.compat import unicode
 from beehive.formatter.base import Formatter
 from beehive.textutil import compute_words_maxsize
 
@@ -108,7 +109,7 @@ class TagsFormatter(AbstractTagsFormatter):
 
         parts = []
         if len(details) == 1:
-            parts.append(details.keys()[0])
+            parts.append(list(details.keys())[0])
         else:
             for category in sorted(details.keys()):
                 text = u"%s: %d" % (category, details[category])
@@ -132,9 +133,9 @@ class TagsFormatter(AbstractTagsFormatter):
 
     def report_tag_counts_by_usage(self):
         # -- PREPARE REPORT:
-        compare = lambda x, y: cmp(len(self.tag_counts[y]),
-                                   len(self.tag_counts[x]))
-        ordered_tags = sorted(list(self.tag_counts.keys()), compare)
+        ordered_tags = sorted(
+            list(self.tag_counts.keys()),
+            key=lambda x: len(self.tag_counts[x], reverse=True))
         tag_maxsize = compute_words_maxsize(ordered_tags)
         schema = "  @%-" + str(tag_maxsize) + "s %4d    (used for %s)\n"
 

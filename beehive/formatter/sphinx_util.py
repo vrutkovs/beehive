@@ -4,6 +4,7 @@ Provides utility function for generating Sphinx-based documentation.
 """
 
 from beehive.textutil import compute_words_maxsize
+from beehive.compat import unicode
 import codecs
 
 

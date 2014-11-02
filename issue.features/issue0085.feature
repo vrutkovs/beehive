@@ -37,19 +37,19 @@ Feature: Issue #85: AssertionError with nested regex and pretty formatter
         @when(u'I try to match "(?P<foo>foo and more)"')
         def impl(context, **kwargs):
             kwargs["regexp_case"] = "simple"
-            print "CASE UNNESTED: {0}".format(kwargs)
+            print("CASE UNNESTED: {0}".format(kwargs))
             store_in_context(context, kwargs)
 
         @when(u'I try to match "(?P<foo>foo(?P<bar>bar)?)"')
         def impl(context, **kwargs):
             kwargs["regexp_case"] = "nested"
-            print "CASE NESTED: {0}".format(kwargs)
+            print("CASE NESTED: {0}".format(kwargs))
             store_in_context(context, kwargs)
 
         @when(u'I try to match "(?P<foo>foo) (?P<bar>bar)?"')
         def impl(context, **kwargs):
             kwargs["regexp_case"] = "optional"
-            print "CASE OPTIONAL: {0}".format(kwargs)
+            print("CASE OPTIONAL: {0}".format(kwargs))
             store_in_context(context, kwargs)
         """
     And   a file named "features/matching.feature" with:
@@ -110,7 +110,7 @@ Feature: Issue #85: AssertionError with nested regex and pretty formatter
         """
     And  the command output should not contain
         """
-        assert isinstance(text, unicode)
+        assert isinstance(text, str)
         """
     And  the command output should not contain
         """

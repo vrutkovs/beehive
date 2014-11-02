@@ -34,7 +34,7 @@ class StripEscapesTest(unittest.TestCase):
         color_index = 0
         colored_chars = []
         for char in text:
-            color = colors[color_index]
+            color = list(colors)[color_index]
             colored_chars.append(cls.colorize(char, color))
             color_index += 1
             if color_index >= colors_size:

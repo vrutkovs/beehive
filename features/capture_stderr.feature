@@ -91,10 +91,10 @@ Feature: Capture stderr output and show it in case of failures/errors
                 Scenario:
                     Given a step writes "Alice" to stderr and passes ... passed
                     When a step writes "Bob" to stderr and fails ... failed
-            Assertion Failed: XFAIL, step with: Bob;
-            Captured stderr:
-            stderr:Alice;
-            stderr:Bob;
+                      Assertion Failed: XFAIL, step with: Bob;
+                      Captured stderr:
+                      stderr:Alice;
+                      stderr:Bob;
             """
         But the command output should not contain:
             """

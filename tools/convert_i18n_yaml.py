@@ -4,6 +4,7 @@ import pprint
 import sys
 
 import yaml
+from beehive.compat import unicode
 
 #
 # usage: convert_i18n_yaml.py i18n.yml ../beehive/i18n.py

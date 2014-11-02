@@ -3,6 +3,7 @@
 import codecs
 import os.path
 import sys
+import io
 
 
 class StreamOpener(object):
@@ -37,14 +38,7 @@ class StreamOpener(object):
     def ensure_stream_with_encoder(cls, stream, encoding=None):
         if not encoding:
             encoding = cls.default_encoding
-        if hasattr(stream, "stream"):
-            return stream    # Already wrapped with a codecs.StreamWriter
-        elif sys.version_info[0] < 3:
-            # py2 does, however, sometimes declare an encoding on sys.stdout,
-            # even if it doesn't use it (or it might be explicitly None)
-            stream = codecs.getwriter(encoding)(stream)
-        elif not getattr(stream, 'encoding', None):
-            # ok, so the stream doesn't have an encoding at all so add one
+        if sys.version < '3':
             stream = codecs.getwriter(encoding)(stream)
         return stream
 

@@ -4,13 +4,13 @@ Contains utility functions and classes for Runners.
 """
 
 from beehive import parser
+from beehive.compat import basestring
 from beehive.model import FileLocation
 from bisect import bisect
 import glob
 import os.path
 import re
 import sys
-import types
 
 
 # -----------------------------------------------------------------------------
@@ -352,14 +352,12 @@ def make_undefined_step_snippet(step, language=None):
     :param language: i18n language, optionally needed for step text parsing.
     :return: Undefined-step snippet (as string).
     """
-    if isinstance(step, types.StringTypes):
+    if isinstance(step, basestring):
         step_text = step
         steps = parser.parse_steps(step_text, language=language)
         step = steps[0]
         assert step, "ParseError: %s" % step_text
-    prefix = u""
-    if sys.version_info[0] == 2:
-        prefix = u"u"
+    prefix = u"u"
     single_quote = "'"
     if single_quote in step.name:
         step.name = step.name.replace(single_quote, r"\'")

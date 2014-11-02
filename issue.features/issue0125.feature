@@ -10,7 +10,7 @@ Feature: Issue #125: Duplicate "Captured stdout" if substep has failed
 
       @step('a step fails with stdout "{message}"')
       def step_fails_with_stdout(context, message):
-          print(message)
+          print(str(message))
           assert False, 'EXPECT: Step fails with stdout.'
 
       @step('substep fails with stdout "{message}"')
