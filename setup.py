@@ -56,7 +56,7 @@ def find_packages_by_root_package(where):
 # -----------------------------------------------------------------------------
 setup(
     name="beehive",
-    version="1.0",
+    version="1.1",
     description="beehive is behaviour-driven development, Python style",
     long_description=description,
     author="Benno Rice, Richard Jones, Jens Engel, Vadim Rutkovsky",

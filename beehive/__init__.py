@@ -16,7 +16,7 @@ To get started, we recommend the `tutorial`_ and then the `test language`_ and
 .. _`api`: api.html
 '''
 
-__version__ = '1.0'
+__version__ = '1.1'
 
 import sys
 from beehive.step_registry import given, when, then, step, Given, When, Then, Step
