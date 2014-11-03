@@ -31,7 +31,7 @@ class InvalidFilenameError(ValueError):
 # -----------------------------------------------------------------------------
 # CLASS: FileLocationParser
 # -----------------------------------------------------------------------------
-class FileLocationParser:
+class FileLocationParser(object):
     # -- pylint: disable=W0232
     # W0232: 84,0:FileLocationParser: Class has no __init__ method
     pattern = re.compile(r"^\s*(?P<filename>.*):(?P<line>\d+)\s*$", re.UNICODE)
