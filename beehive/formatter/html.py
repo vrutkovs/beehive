@@ -305,7 +305,7 @@ class HTMLFormatter(Formatter):
         self.scenario_id += 1
 
     def scenario_outline(self, outline):
-        self.scenario(self, outline)
+        self.scenario(outline)
         self.scenario_el.set('class', 'scenario outline')
 
     def match(self, match):
