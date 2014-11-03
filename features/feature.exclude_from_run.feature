@@ -60,7 +60,7 @@ Feature: Exclude Feature from Test Run
             """
         And a file named "features/steps/steps.py" with:
             """
-            from behave import step
+            from beehive import step
 
             @step('{word:w} step passes')
             def step_passes(context, word):
@@ -83,7 +83,7 @@ Feature: Exclude Feature from Test Run
                     sys.stdout.write("EXCLUDED-BY-USER: Feature %s\n" % feature.name)
                     feature.mark_skipped()
             """
-        When I run "behave -f plain -T features/"
+        When I run "beehive -f plain -T features/"
         Then it should pass with:
             """
             1 feature passed, 0 failed, 1 skipped

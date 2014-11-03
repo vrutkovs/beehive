@@ -1,7 +1,6 @@
 from __future__ import with_statement
 import os.path
 import tempfile
-import unittest
 
 from nose.tools import eq_, ok_
 from beehive import configuration
@@ -30,14 +29,16 @@ class TestConfiguration(object):
             f.write(TEST_CONFIG)
 
         d = configuration.read_configuration(tn)
-        eq_(d['outfiles'], [
-            os.path.normpath('/absolute/path1'),
-            os.path.normpath(os.path.join(tndir, 'relative/path2')),
-        ])
-        eq_(d['paths'], [
-            os.path.normpath('/absolute/path3'),  # -- WINDOWS-REQUIRES: normpath
-            os.path.normpath(os.path.join(tndir, 'relative/path4'))
-        ])
+        eq_(
+            d['outfiles'], [
+                os.path.normpath('/absolute/path1'),
+                os.path.normpath(os.path.join(tndir, 'relative/path2')),
+            ])
+        eq_(
+            d['paths'], [
+                os.path.normpath('/absolute/path3'),  # -- WINDOWS-REQUIRES: normpath
+                os.path.normpath(os.path.join(tndir, 'relative/path4'))
+            ])
         eq_(d['format'], ['pretty', 'tag-counter'])
         eq_(d['tags'], ['@foo,~@bar', '@zap'])
         eq_(d['stdout_capture'], False)

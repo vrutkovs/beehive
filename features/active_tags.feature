@@ -28,7 +28,7 @@ Feature: Active Tags
       Given a new working directory
       And a file named "features/steps/pass_steps.py" with:
         """
-        from behave import step
+        from beehive import step
 
         @step('{word:w} step passes')
         def step_passes(context, word):
@@ -51,7 +51,7 @@ Feature: Active Tags
         """
       And a file named "features/environment.py" with:
         """
-        from behave.tag_matcher import OnlyWithCategoryTagMatcher
+        from beehive.tag_matcher import OnlyWithCategoryTagMatcher
         import sys
 
         # -- MATCHES TAGS: @only.with_{category}=*  =>  @only.with_browser=*
@@ -63,7 +63,7 @@ Feature: Active Tags
                 sys.stdout.write("ACTIVE-TAG DISABLED: Scenario %s\n" % scenario.name)
                 scenario.mark_skipped()   #< LATE-EXCLUDE from run-set.
         """
-      When I run "behave -f plain -T features/example1.active_tags.feature"
+      When I run "beehive -f plain -T features/example1.active_tags.feature"
       Then it should pass with:
         """
         1 scenario passed, 0 failed, 1 skipped
@@ -95,7 +95,7 @@ Feature: Active Tags
         """
       And a file named "features/environment.py" with:
         """
-        from behave.tag_matcher import OnlyWithAnyCategoryTagMatcher
+        from beehive.tag_matcher import OnlyWithAnyCategoryTagMatcher
         import sys
 
         # -- MATCHES ANY TAGS: @only.with_{category}={value}
@@ -111,7 +111,7 @@ Feature: Active Tags
                 sys.stdout.write("ACTIVE-TAG DISABLED: Scenario %s\n" % scenario.name)
                 scenario.mark_skipped()   #< LATE-EXCLUDE from run-set.
         """
-      When I run "behave -f plain -T features/example2.active_tags.feature"
+      When I run "beehive -f plain -T features/example2.active_tags.feature"
       Then it should pass with:
         """
         1 scenario passed, 0 failed, 1 skipped

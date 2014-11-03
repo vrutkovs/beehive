@@ -1,4 +1,4 @@
-#-*- encoding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 
 from nose.tools import raises, eq_, assert_raises
 

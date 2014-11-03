@@ -30,14 +30,14 @@ Feature: Alternate step implementations
           """
       And a file named "features/alternate_steps/example_steps.py" with:
           """
-          from behave import step
+          from beehive import step
 
           @step('I do something')
           def step_do_something(context):
               assert context.alternate_environment_is_in_use, \
                      "Expected alternate_environment.py to be used"
           """
-     When I run "behave -f plain --steps-prefix alternate_ features/example_use_different_steps.feature"
+     When I run "beehive -f plain --steps-prefix alternate_ features/example_use_different_steps.feature"
      Then it should pass with:
           """
           1 feature passed, 0 failed, 0 skipped

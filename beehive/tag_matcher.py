@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class TagMatcher(object):
     """Abstract base class that defines the TagMatcher protocol."""
 
@@ -71,10 +72,8 @@ class OnlyWithCategoryTagMatcher(TagMatcher):
 
     def __init__(self, category, value, tag_prefix=None, value_sep=None):
         super(OnlyWithCategoryTagMatcher, self).__init__()
-        self.active_tag = self.make_category_tag(category, value,
-                                                 tag_prefix, value_sep)
-        self.category_tag_prefix = self.make_category_tag(category, None,
-                                                   tag_prefix, value_sep)
+        self.active_tag = self.make_category_tag(category, value, tag_prefix, value_sep)
+        self.category_tag_prefix = self.make_category_tag(category, None, tag_prefix, value_sep)
 
     def should_exclude_with(self, tags):
         category_tags = self.select_category_tags(tags)
@@ -84,7 +83,7 @@ class OnlyWithCategoryTagMatcher(TagMatcher):
         return False
 
     def select_category_tags(self, tags):
-        return [tag  for tag in tags
+        return [tag for tag in tags
                 if tag.startswith(self.category_tag_prefix)]
 
     @classmethod
@@ -172,12 +171,12 @@ class OnlyWithAnyCategoryTagMatcher(TagMatcher):
                 exclude_decision_map[category] = False
             else:
                 # -- CASE: Inactive category value selected, may exclude it.
-                if not exclude_decision_map.has_key(category):
+                if category not in exclude_decision_map:
                     exclude_decision_map[category] = True
         return any(exclude_decision_map.values())
 
     def select_category_tags(self, tags):
-        return [tag  for tag in tags
+        return [tag for tag in tags
                 if tag.startswith(self.tag_prefix)]
 
     def parse_category_tag(self, tag):

@@ -57,7 +57,7 @@ Feature: Exclude Scenario from Test Run
             """
         And a file named "features/steps/steps.py" with:
             """
-            from behave import step
+            from beehive import step
 
             @step('{word:w} step passes')
             def step_passes(context, word):
@@ -80,7 +80,7 @@ Feature: Exclude Scenario from Test Run
                     sys.stdout.write("EXCLUDED-BY-USER: Scenario %s\n" % scenario.name)
                     scenario.mark_skipped()
             """
-        When I run "behave -f plain -T features/example.feature"
+        When I run "beehive -f plain -T features/example.feature"
         Then it should pass with:
             """
             2 scenarios passed, 0 failed, 1 skipped
@@ -110,7 +110,7 @@ Feature: Exclude Scenario from Test Run
                         sys.stdout.write("EXCLUDED-BEFORE-FEATURE: Scenario %s\n" % scenario.name)
                         scenario.mark_skipped()
             """
-        When I run "behave -f plain -T features/example.feature"
+        When I run "beehive -f plain -T features/example.feature"
         Then it should pass with:
             """
             1 scenario passed, 0 failed, 2 skipped

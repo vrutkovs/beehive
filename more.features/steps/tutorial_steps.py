@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 """Step implementations for tutorial example."""
 
-from behave import *
+from beehive import given, when, then
 
-@given('we have behave installed')
-def step_impl(context):
+
+@given('we have beehive installed')
+def we_have_beehive_installed(context):
     pass
 
+
 @when('we implement a test')
-def step_impl(context):
+def we_implement_a_test(context):
     assert True is not False
 
-@then('behave will test it for us!')
-def step_impl(context):
+
+@then('beehive will test it for us!')
+def beehive_will_test_it_for_us(context):
     assert context.failed is False

@@ -9,7 +9,7 @@ Feature: Issue #228: Allow before_scenario to determine whether steps should be 
     Given a new working directory
     And a file named "features/steps/steps.py" with:
         """
-        from behave import step
+        from beehive import step
 
         @step('a step passes')
         def step_passes(context):
@@ -30,7 +30,7 @@ Feature: Issue #228: Allow before_scenario to determine whether steps should be 
           Scenario: Run this scenario
             Given a step passes
         """
-    When I run "behave -f plain features/issue228_example.feature"
+    When I run "beehive -f plain features/issue228_example.feature"
     Then it should pass
      And the command output should contain:
         """

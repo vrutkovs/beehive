@@ -929,7 +929,7 @@ class TestFeatureDirectoryLayout2(object):
 
     def test_supplied_feature_file_no_steps(self):
         config = create_mock_config()
-        config.paths = [ 'features/group1/foo.feature' ]
+        config.paths = ['features/group1/foo.feature']
         config.verbose = True
         r = runner.Runner(config)
 

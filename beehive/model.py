@@ -1079,7 +1079,7 @@ class ScenarioOutline(Scenario):
 
     def compute_status(self):
         if not self.scenarios:
-            return 'passed' # No scenario, report as passed
+            return 'passed'  # No scenario, report as passed
         skipped = 0
         for scenario in self.scenarios:
             scenario_status = scenario.status

@@ -31,7 +31,7 @@ Feature: Issue #238 Skip a Scenario in a Scenario Outline
         def step_impl(context):
             pass
         """
-        When I run "behave"
+        When I run "beehive"
         Then it should pass with:
         """
         1 feature passed, 0 failed, 0 skipped

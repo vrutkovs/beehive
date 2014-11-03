@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from behave.tag_matcher import *
+from beehive.tag_matcher import OnlyWithCategoryTagMatcher, OnlyWithAnyCategoryTagMatcher,\
+    PredicateTagMatcher, CompositeTagMatcher
 from mock import Mock
 from unittest import TestCase
 
@@ -17,42 +18,42 @@ class TestOnlyWithCategoryTagMatcher(TestCase):
         self.category = category
 
     def test_should_exclude_with__returns_false_with_active_tag(self):
-        tags = [ self.active_tag ]
+        tags = [self.active_tag]
         self.assertEqual(False, self.tag_matcher.should_exclude_with(tags))
 
     def test_should_exclude_with__returns_false_with_active_tag_and_more(self):
         test_patterns = [
-            ([ self.active_tag, self.other_tag ], "CASE: first"),
-            ([ self.other_tag, self.active_tag ], "CASE: last"),
-            ([ "foo", self.active_tag, self.other_tag, "bar" ], "CASE: middle"),
+            ([self.active_tag, self.other_tag], "CASE: first"),
+            ([self.other_tag, self.active_tag], "CASE: last"),
+            (["foo", self.active_tag, self.other_tag, "bar"], "CASE: middle"),
         ]
         for tags, case in test_patterns:
             self.assertEqual(False, self.tag_matcher.should_exclude_with(tags),
                              "%s: tags=%s" % (case, tags))
 
     def test_should_exclude_with__returns_true_with_other_tag(self):
-        tags = [ self.other_tag ]
+        tags = [self.other_tag]
         self.assertEqual(True, self.tag_matcher.should_exclude_with(tags))
 
     def test_should_exclude_with__returns_true_with_other_tag_and_more(self):
         test_patterns = [
-            ([ self.other_tag, "foo" ], "CASE: first"),
-            ([ "foo", self.other_tag ], "CASE: last"),
-            ([ "foo", self.other_tag, "bar" ], "CASE: middle"),
+            ([self.other_tag, "foo"], "CASE: first"),
+            (["foo", self.other_tag], "CASE: last"),
+            (["foo", self.other_tag, "bar"], "CASE: middle"),
         ]
         for tags, case in test_patterns:
             self.assertEqual(True, self.tag_matcher.should_exclude_with(tags),
                              "%s: tags=%s" % (case, tags))
 
     def test_should_exclude_with__returns_true_with_similar_tag(self):
-        tags = [ self.similar_tag ]
+        tags = [self.similar_tag]
         self.assertEqual(True, self.tag_matcher.should_exclude_with(tags))
 
     def test_should_exclude_with__returns_true_with_similar_and_more(self):
         test_patterns = [
-            ([ self.similar_tag, "foo" ], "CASE: first"),
-            ([ "foo", self.similar_tag ], "CASE: last"),
-            ([ "foo", self.similar_tag, "bar" ], "CASE: middle"),
+            ([self.similar_tag, "foo"], "CASE: first"),
+            (["foo", self.similar_tag], "CASE: last"),
+            (["foo", self.similar_tag, "bar"], "CASE: middle"),
         ]
         for tags, case in test_patterns:
             self.assertEqual(True, self.tag_matcher.should_exclude_with(tags),
@@ -60,9 +61,9 @@ class TestOnlyWithCategoryTagMatcher(TestCase):
 
     def test_should_exclude_with__returns_false_without_category_tag(self):
         test_patterns = [
-            ([ ],           "CASE: No tags"),
-            ([ "foo" ],     "CASE: One tag"),
-            ([ "foo", "bar" ], "CASE: Two tags"),
+            ([], "CASE: No tags"),
+            (["foo"], "CASE: One tag"),
+            (["foo", "bar"], "CASE: Two tags"),
         ]
         for tags, case in test_patterns:
             self.assertEqual(False, self.tag_matcher.should_exclude_with(tags),
@@ -70,16 +71,16 @@ class TestOnlyWithCategoryTagMatcher(TestCase):
 
     def test_should_run_with__negates_result_of_should_exclude_with(self):
         test_patterns = [
-            ([ ],                   "CASE: No tags"),
-            ([ "foo" ],             "CASE: One non-category tag"),
-            ([ "foo", "bar" ],      "CASE: Two non-category tags"),
-            ([ self.active_tag ],   "CASE: active tag"),
-            ([ self.active_tag, self.other_tag ],  "CASE: active and other tag"),
-            ([ self.active_tag, "foo" ],    "CASE: active and foo tag"),
-            ([ self.other_tag ],            "CASE: other tag"),
-            ([ self.other_tag, "foo" ],     "CASE: other and foo tag"),
-            ([ self.similar_tag ],          "CASE: similar tag"),
-            ([ "foo", self.similar_tag ],   "CASE: foo and similar tag"),
+            ([], "CASE: No tags"),
+            (["foo"], "CASE: One non-category tag"),
+            (["foo", "bar"], "CASE: Two non-category tags"),
+            ([self.active_tag], "CASE: active tag"),
+            ([self.active_tag, self.other_tag], "CASE: active and other tag"),
+            ([self.active_tag, "foo"], "CASE: active and foo tag"),
+            ([self.other_tag], "CASE: other tag"),
+            ([self.other_tag, "foo"], "CASE: other and foo tag"),
+            ([self.similar_tag], "CASE: similar tag"),
+            (["foo", self.similar_tag], "CASE: foo and similar tag"),
         ]
         for tags, case in test_patterns:
             result1 = self.tag_matcher.should_run_with(tags)
@@ -144,44 +145,44 @@ class TestOnlyWithAnyCategoryTagMatcher(TestCase):
         self.unknown_category_tag = TagMatcher.make_category_tag("UNKNOWN", "one")
 
     def test_should_exclude_with__returns_false_with_active_tag(self):
-        tags1 = [ self.category1_active_tag ]
-        tags2 = [ self.category2_active_tag ]
+        tags1 = [self.category1_active_tag]
+        tags2 = [self.category2_active_tag]
         self.assertEqual(False, self.tag_matcher.should_exclude_with(tags1))
         self.assertEqual(False, self.tag_matcher.should_exclude_with(tags2))
 
     def test_should_exclude_with__returns_false_with_active_tag_and_more(self):
         test_patterns = [
-            ([ self.category1_active_tag, self.category1_other_tag ], "CASE: first"),
-            ([ self.category1_other_tag, self.category1_active_tag ], "CASE: last"),
-            ([ "foo", self.category1_active_tag, self.category1_other_tag, "bar" ], "CASE: middle"),
+            ([self.category1_active_tag, self.category1_other_tag], "CASE: first"),
+            ([self.category1_other_tag, self.category1_active_tag], "CASE: last"),
+            (["foo", self.category1_active_tag, self.category1_other_tag, "bar"], "CASE: middle"),
         ]
         for tags, case in test_patterns:
             self.assertEqual(False, self.tag_matcher.should_exclude_with(tags),
                              "%s: tags=%s" % (case, tags))
 
     def test_should_exclude_with__returns_true_with_other_tag(self):
-        tags = [ self.category1_other_tag ]
+        tags = [self.category1_other_tag]
         self.assertEqual(True, self.tag_matcher.should_exclude_with(tags))
 
     def test_should_exclude_with__returns_true_with_other_tag_and_more(self):
         test_patterns = [
-            ([ self.category1_other_tag, "foo" ], "CASE: first"),
-            ([ "foo", self.category1_other_tag ], "CASE: last"),
-            ([ "foo", self.category1_other_tag, "bar" ], "CASE: middle"),
+            ([self.category1_other_tag, "foo"], "CASE: first"),
+            (["foo", self.category1_other_tag], "CASE: last"),
+            (["foo", self.category1_other_tag, "bar"], "CASE: middle"),
         ]
         for tags, case in test_patterns:
             self.assertEqual(True, self.tag_matcher.should_exclude_with(tags),
                              "%s: tags=%s" % (case, tags))
 
     def test_should_exclude_with__returns_true_with_similar_tag(self):
-        tags = [ self.category1_similar_tag ]
+        tags = [self.category1_similar_tag]
         self.assertEqual(True, self.tag_matcher.should_exclude_with(tags))
 
     def test_should_exclude_with__returns_true_with_similar_and_more(self):
         test_patterns = [
-            ([ self.category1_similar_tag, "foo" ], "CASE: first"),
-            ([ "foo", self.category1_similar_tag ], "CASE: last"),
-            ([ "foo", self.category1_similar_tag, "bar" ], "CASE: middle"),
+            ([self.category1_similar_tag, "foo"], "CASE: first"),
+            (["foo", self.category1_similar_tag], "CASE: last"),
+            (["foo", self.category1_similar_tag, "bar"], "CASE: middle"),
         ]
         for tags, case in test_patterns:
             self.assertEqual(True, self.tag_matcher.should_exclude_with(tags),
@@ -189,9 +190,9 @@ class TestOnlyWithAnyCategoryTagMatcher(TestCase):
 
     def test_should_exclude_with__returns_false_without_category_tag(self):
         test_patterns = [
-            ([ ],           "CASE: No tags"),
-            ([ "foo" ],     "CASE: One tag"),
-            ([ "foo", "bar" ], "CASE: Two tags"),
+            ([], "CASE: No tags"),
+            (["foo"], "CASE: One tag"),
+            (["foo", "bar"], "CASE: Two tags"),
         ]
         for tags, case in test_patterns:
             self.assertEqual(False, self.tag_matcher.should_exclude_with(tags),
@@ -201,7 +202,7 @@ class TestOnlyWithAnyCategoryTagMatcher(TestCase):
         """Tags from unknown categories, not supported by category_value_provider,
         should not be excluded.
         """
-        tags = [ self.unknown_category_tag ]
+        tags = [self.unknown_category_tag]
         self.assertEqual("only.with_UNKNOWN=one", self.unknown_category_tag)
         self.assertEqual(None, self.tag_matcher.category_value_provider.get("UNKNOWN"))
         self.assertEqual(False, self.tag_matcher.should_exclude_with(tags))
@@ -209,18 +210,18 @@ class TestOnlyWithAnyCategoryTagMatcher(TestCase):
     def test_should_exclude_with__combinations_of_2_categories(self):
         test_patterns = [
             ("CASE 00: 2 inactive category tags", True,
-             [ self.category1_other_tag, self.category2_other_tag]),
+             [self.category1_other_tag, self.category2_other_tag]),
             ("CASE 01: inactive and active category tags", True,
-             [ self.category1_other_tag, self.category2_active_tag]),
+             [self.category1_other_tag, self.category2_active_tag]),
             ("CASE 10: active and inactive category tags", True,
-             [ self.category1_active_tag, self.category2_other_tag]),
+             [self.category1_active_tag, self.category2_other_tag]),
             ("CASE 11: 2 active category tags", False,  # -- SHOULD-RUN
-             [ self.category1_active_tag, self.category2_active_tag]),
+             [self.category1_active_tag, self.category2_active_tag]),
             # -- SPECIAL CASE: With unknown category
             ("CASE 0x: inactive and unknown category tags", True,
-             [ self.category1_other_tag, self.unknown_category_tag]),
+             [self.category1_other_tag, self.unknown_category_tag]),
             ("CASE 1x: active and unknown category tags", False,  # SHOULD-RUN
-             [ self.category1_active_tag, self.unknown_category_tag]),
+             [self.category1_active_tag, self.unknown_category_tag]),
         ]
         for case, expected, tags in test_patterns:
             actual_result = self.tag_matcher.should_exclude_with(tags)
@@ -229,22 +230,23 @@ class TestOnlyWithAnyCategoryTagMatcher(TestCase):
 
     def test_should_run_with__negates_result_of_should_exclude_with(self):
         test_patterns = [
-            ([ ],                   "CASE: No tags"),
-            ([ "foo" ],             "CASE: One non-category tag"),
-            ([ "foo", "bar" ],      "CASE: Two non-category tags"),
-            ([ self.category1_active_tag ],   "CASE: active tag"),
-            ([ self.category1_active_tag, self.category1_other_tag ],  "CASE: active and other tag"),
-            ([ self.category1_active_tag, "foo" ],    "CASE: active and foo tag"),
-            ([ self.category1_other_tag ],            "CASE: other tag"),
-            ([ self.category1_other_tag, "foo" ],     "CASE: other and foo tag"),
-            ([ self.category1_similar_tag ],          "CASE: similar tag"),
-            ([ "foo", self.category1_similar_tag ],   "CASE: foo and similar tag"),
+            ([], "CASE: No tags"),
+            (["foo"], "CASE: One non-category tag"),
+            (["foo", "bar"], "CASE: Two non-category tags"),
+            ([self.category1_active_tag], "CASE: active tag"),
+            ([self.category1_active_tag, self.category1_other_tag], "CASE: active and other tag"),
+            ([self.category1_active_tag, "foo"], "CASE: active and foo tag"),
+            ([self.category1_other_tag], "CASE: other tag"),
+            ([self.category1_other_tag, "foo"], "CASE: other and foo tag"),
+            ([self.category1_similar_tag], "CASE: similar tag"),
+            (["foo", self.category1_similar_tag], "CASE: foo and similar tag"),
         ]
         for tags, case in test_patterns:
             result1 = self.tag_matcher.should_run_with(tags)
             result2 = self.tag_matcher.should_exclude_with(tags)
             self.assertEqual(result1, not result2, "%s: tags=%s" % (case, tags))
             self.assertEqual(not result1, result2, "%s: tags=%s" % (case, tags))
+
 
 class TestPredicateTagMatcher(TestCase):
 
@@ -253,7 +255,7 @@ class TestPredicateTagMatcher(TestCase):
         predicate_function = Mock(predicate_function_blueprint)
         predicate_function.return_value = True
         tag_matcher = PredicateTagMatcher(predicate_function)
-        tags = [ "foo", "bar" ]
+        tags = ["foo", "bar"]
         self.assertEqual(True, tag_matcher.should_exclude_with(tags))
         predicate_function.assert_called_once_with(tags)
         self.assertEqual(True, predicate_function(tags))
@@ -261,7 +263,7 @@ class TestPredicateTagMatcher(TestCase):
     def test_should_exclude_with__returns_true_when_predicate_is_true(self):
         predicate_always_true = lambda tags: True
         tag_matcher1 = PredicateTagMatcher(predicate_always_true)
-        tags = [ "foo", "bar" ]
+        tags = ["foo", "bar"]
         self.assertEqual(True, tag_matcher1.should_exclude_with(tags))
         self.assertEqual(True, predicate_always_true(tags))
 
@@ -270,14 +272,14 @@ class TestPredicateTagMatcher(TestCase):
         def predicate_contains_foo(tags):
             return any(x == "foo" for x in tags)
         tag_matcher2 = PredicateTagMatcher(predicate_contains_foo)
-        tags = [ "foo", "bar" ]
+        tags = ["foo", "bar"]
         self.assertEqual(True, tag_matcher2.should_exclude_with(tags))
         self.assertEqual(True, predicate_contains_foo(tags))
 
     def test_should_exclude_with__returns_false_when_predicate_is_false(self):
         predicate_always_false = lambda tags: False
         tag_matcher1 = PredicateTagMatcher(predicate_always_false)
-        tags = [ "foo", "bar" ]
+        tags = ["foo", "bar"]
         self.assertEqual(False, tag_matcher1.should_exclude_with(tags))
         self.assertEqual(False, predicate_always_false(tags))
 
@@ -306,7 +308,7 @@ class TestCompositeTagMatcher(TestCase):
 
     def test_should_exclude_with__returns_true_when_any_tag_matcher_returns_true(self):
         test_patterns = [
-            ("CASE: with foo",  ["foo", "bar"]),
+            ("CASE: with foo", ["foo", "bar"]),
             ("CASE: with foo2", ["foozy", "foo", "bar"]),
         ]
         for case, tags in test_patterns:
@@ -315,13 +317,13 @@ class TestCompositeTagMatcher(TestCase):
                              "%s: tags=%s" % (case, tags))
 
             actual_true_count = self.count_tag_matcher_with_result(
-                                self.ctag_matcher.tag_matchers, tags, True)
+                self.ctag_matcher.tag_matchers, tags, True)
             self.assertEqual(1, actual_true_count)
 
     def test_should_exclude_with__returns_false_when_no_tag_matcher_return_true(self):
         test_patterns = [
-            ("CASE: without foo",   ["fool", "bar"]),
-            ("CASE: without foo2",  ["foozy", "bar"]),
+            ("CASE: without foo", ["fool", "bar"]),
+            ("CASE: without foo2", ["foozy", "bar"]),
         ]
         for case, tags in test_patterns:
             actual_result = self.ctag_matcher.should_exclude_with(tags)
@@ -329,5 +331,5 @@ class TestCompositeTagMatcher(TestCase):
                              "%s: tags=%s" % (case, tags))
 
             actual_true_count = self.count_tag_matcher_with_result(
-                                    self.ctag_matcher.tag_matchers, tags, True)
+                self.ctag_matcher.tag_matchers, tags, True)
             self.assertEqual(0, actual_true_count)
