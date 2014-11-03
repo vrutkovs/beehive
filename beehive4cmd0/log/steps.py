@@ -397,7 +397,6 @@ def step_I_capture_logrecords(context):
 
     :param context:
     """
-    raise NotImplementedError()
     logcapture = getattr(context, "logcapture", None)
     if not logcapture:
-        context.logcapture = LoggingCapture()
+        context.logcapture = LoggingCapture(context.config)
