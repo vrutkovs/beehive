@@ -539,7 +539,7 @@ class TestRunner(object):
         l = {}
         runner.exec_file(fn, g, l)
         assert '__file__' in l
-        assert 'spam' in l, '"spam" variable not set in locals (%r)' % (g, l)
+        assert 'spam' in l, '"spam" variable not set in locals (%r)' % l
         eq_(l['spam'], fn)
 
     def test_run_returns_true_if_everything_passed(self):
