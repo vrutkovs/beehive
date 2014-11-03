@@ -19,4 +19,5 @@ script:
   - pep8 --ignore=E501,E265 --show-source --show-pep8 **/*.py
 after_success:
   - coverage combine
+  - coverage xml
   - codecov

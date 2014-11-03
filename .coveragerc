@@ -39,4 +39,4 @@ ignore_errors = True
 directory = build/coverage.html
 
 [xml]
-outfile = build/coverage.xml
+outfile = coverage.xml
