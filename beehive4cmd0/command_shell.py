@@ -96,9 +96,13 @@ class Command(object):
             cmdargs[0] = real_command
 
         if cmdargs[0].split('/')[-1] == 'beehive' and 'COVERAGE_FILE' in os.environ.keys():
-            import time
-            os.environ['COVERAGE_FILE'] = '../.coverage.%d' % int(round(time.time() * 1000))
-            cmdargs = ['coverage', 'run', '--branch'] + cmdargs
+            # Skip pypy - it takes ages on Travis to complete and generally useless
+            if 'TRAVIS_PYTHON_VERSION' in os.environ.keys() and os.environ['TRAVIS_PYTHON_VERSION'] == 'pypy':
+                pass
+            else:
+                import time
+                os.environ['COVERAGE_FILE'] = '../.coverage.%d' % int(round(time.time() * 1000))
+                cmdargs = ['coverage', 'run', '--branch'] + cmdargs
 
         # -- RUN COMMAND:
         try:
