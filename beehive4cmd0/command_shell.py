@@ -95,6 +95,11 @@ class Command(object):
         if real_command:
             cmdargs[0] = real_command
 
+        if cmdargs[0].split('/')[-1] == 'beehive' and 'COVERAGE_FILE' in os.environ.keys():
+            import time
+            os.environ['COVERAGE_FILE'] = '../.coverage.%d' % int(round(time.time() * 1000))
+            cmdargs = ['coverage', 'run', '--branch'] + cmdargs
+
         # -- RUN COMMAND:
         try:
             process = subprocess.Popen(cmdargs,
