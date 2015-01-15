@@ -29,14 +29,13 @@ class ReproducerFormatter(Formatter):
         self.stream.write('\n\n')
 
         # Make a fake context object
-        self.stream.write('context = object()\n\n')
+        self.stream.write('class Context:\n    pass\n')
+        self.stream.write('context = Context()\n\n')
 
         # Write before_all hook
         self.stream.write(self.hooks['before_all'])
 
         self.feature_counter = 0
-        self.scenario_counter = 0
-        self.tag_counter = 0
 
     def feature(self, feature):
         if self.feature_counter != 0:
@@ -46,21 +45,27 @@ class ReproducerFormatter(Formatter):
         self.stream.write(self.hooks['before_feature'])
         self.feature_counter += 1
         self.scenario_counter = 0
-
-    def scenario(self, scenario):
-        if self.scenario_counter != 0:
-            self.stream.write(self.hooks['after_scenario'])
-        self.stream.write(self.hooks['before_scenario'])
-        self.scenario_counter += 1
+        self.scenario_started = False
+        self.current_match = None
 
     def match(self, match):
-        self.stream.write(self.hooks['before_step'])
-        self._write_code_for_function(match)
-        self.stream.write(self.hooks['after_step'])
+        if match:
+            self.current_match = match
+
+    def result(self, result):
+        if result.status != 'skipped':
+            if not self.scenario_started:
+                self.stream.write(self.hooks['before_scenario'])
+                self.scenario_counter += 1
+                self.scenario_started = True
+
+            self.stream.write(self.hooks['before_step'])
+            self._write_code_for_function(self.current_match)
+            self.stream.write(self.hooks['after_step'])
 
     def eof(self):
         if self.feature_counter != 0:
-            if self.scenario_counter != 0:
+            if self.scenario_started:
                 self.stream.write(self.hooks['after_scenario'])
             self.stream.write(self.hooks['after_feature'])
 
@@ -115,7 +120,7 @@ class ReproducerFormatter(Formatter):
                 func = getattr(env_file, hook_name)
                 func_code = inspect.getsourcelines(func)[0]
                 # Skip function declaration and unindent
-                func_code = ''.join(self._strip_ident(func_code[1:]))
+                func_code = '\n' + ''.join(self._strip_ident(func_code[1:]))
             hooks[hook_name] = func_code
         return hooks
 
@@ -129,11 +134,16 @@ class ReproducerFormatter(Formatter):
     def _write_code_for_function(self, match):
         self.stream.write('\n')
 
+        func_lines = inspect.getsourcelines(match.func)[0]
+
+        # Print func decorator
+        if func_lines[0].startswith('@'):
+            self.stream.write('# %s' % func_lines[0])
+
         # Print func arguments first
         for arg in match.arguments:
             self.stream.write("%s = '%s'\n" % (arg.name, arg.value))
 
-        func_lines = inspect.getsourcelines(match.func)[0]
         # Strip decorator, func declaration and detect identation
         func_lines = self._strip_ident(func_lines[2:])
         [self.stream.write(line) for line in func_lines]
