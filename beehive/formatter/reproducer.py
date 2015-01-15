@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from beehive.formatter.base import Formatter
+
 import inspect
 import re
-import importlib
 import types
 import os
+
+try:
+    import importlib
+except ImportError:
+    pass
 
 
 class ReproducerFormatter(Formatter):
