@@ -13,6 +13,7 @@ from beehive.formatter.rerun import RerunFormatter
 from beehive.formatter.tags import TagsFormatter, TagsLocationFormatter
 from beehive.formatter.steps import StepsFormatter, StepsDocFormatter, StepsUsageFormatter
 from beehive.formatter.sphinx_steps import SphinxStepsFormatter
+from beehive.formatter.reproducer import ReproducerFormatter
 
 # -----------------------------------------------------------------------------
 # FORMATTER REGISTRY:
@@ -79,6 +80,7 @@ def setup_formatters():
     formatters["steps.usage"] = StepsUsageFormatter
     formatters["sphinx.steps"] = SphinxStepsFormatter
     formatters["html"] = HTMLFormatter
+    formatters["reproducer"] = ReproducerFormatter
 
 # -----------------------------------------------------------------------------
 # MODULE-INIT:
