@@ -17,28 +17,54 @@ class ReproducerFormatter(Formatter):
         self.stream = self.open()
         self.steps = []
 
+        # Get hooks code
         self.hooks = self._import_hooks(config.env_py)
-        self.imports = self._get_step_imports(config.env_py, config.steps_dir)
 
-    def match(self, match):
-        self.steps.append(match)
-
-    def close(self):
         # Write a python encoding
         self.stream.write('# -*- coding: utf-8 -*-\n\n')
 
-        # Paste collected imports
-        [self.stream.write(line) for line in self.imports]
+        # Write initial imports
+        imports = self._get_step_imports(config.env_py, config.steps_dir)
+        [self.stream.write(line) for line in imports]
         self.stream.write('\n\n')
 
         # Make a fake context object
         self.stream.write('context = object()\n\n')
 
+        # Write before_all hook
         self.stream.write(self.hooks['before_all'])
-        for match in self.steps:
-            self.stream.write(self.hooks['before_step'])
-            self._write_code_for_function(match)
-            self.stream.write(self.hooks['after_step'])
+
+        self.feature_counter = 0
+        self.scenario_counter = 0
+        self.tag_counter = 0
+
+    def feature(self, feature):
+        if self.feature_counter != 0:
+            if self.scenario_counter != 0:
+                self.stream.write(self.hooks['after_scenario'])
+            self.stream.write(self.hooks['after_feature'])
+        self.stream.write(self.hooks['before_feature'])
+        self.feature_counter += 1
+        self.scenario_counter = 0
+
+    def scenario(self, scenario):
+        if self.scenario_counter != 0:
+            self.stream.write(self.hooks['after_scenario'])
+        self.stream.write(self.hooks['before_scenario'])
+        self.scenario_counter += 1
+
+    def match(self, match):
+        self.stream.write(self.hooks['before_step'])
+        self._write_code_for_function(match)
+        self.stream.write(self.hooks['after_step'])
+
+    def eof(self):
+        if self.feature_counter != 0:
+            if self.scenario_counter != 0:
+                self.stream.write(self.hooks['after_scenario'])
+            self.stream.write(self.hooks['after_feature'])
+
+    def close(self):
         self.stream.write(self.hooks['after_all'])
 
     def _load_module(self, file_path):
@@ -64,6 +90,10 @@ class ReproducerFormatter(Formatter):
                     content = f.readlines()
                     for line in content:
                         if line.startswith('from ') or line.startswith('import '):
+                            # Skip behave/beehive step import
+                            if line.startswith('from beehive import ') or\
+                               line.startswith('from behave import '):
+                                continue
                             imports.append(line)
             except IOError:
                 pass
@@ -71,14 +101,18 @@ class ReproducerFormatter(Formatter):
 
     def _import_hooks(self, env_file_path):
         hooks = {}
-        known_hooks = ['before_all', 'after_all', 'before_step', 'after_step']
+        known_hooks = [
+            'before_all', 'after_all',
+            'before_feature', 'after_feature',
+            'before_scenario', 'after_scenario',
+            'before_step', 'after_step']
 
         env_file = self._load_module(env_file_path)
         funcs = [x for x in dir(env_file) if isinstance(getattr(env_file, x), types.FunctionType)]
         for hook_name in known_hooks:
             func_code = ''
-            if hook_name in funcs:
-                func = getattr(env_file, 'before_all')
+            if hook_name in funcs and hasattr(env_file, hook_name):
+                func = getattr(env_file, hook_name)
                 func_code = inspect.getsourcelines(func)[0]
                 # Skip function declaration and unindent
                 func_code = ''.join(self._strip_ident(func_code[1:]))
